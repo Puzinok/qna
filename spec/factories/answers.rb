@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :answer do
-    body ""
+    body "MyText"
     question nil
   end
 end
