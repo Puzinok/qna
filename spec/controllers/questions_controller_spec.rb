@@ -14,4 +14,13 @@ RSpec.describe QuestionsController, type: :controller do
       expect(response).to render_template :new
     end
   end
+
+  describe 'POST #create' do
+    before { post :create }
+    context 'with valid attributes' do
+      it 'saves new question in database' do
+        expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
+      end
+    end
+  end
 end
