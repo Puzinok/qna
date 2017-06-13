@@ -32,10 +32,21 @@ RSpec.describe QuestionsController, type: :controller do
         expect{ post :create, params: { question: attributes_for(:invalid_question) } }.to_not change(Question, :count)
       end
 
-      it 'redirect to new view' do
+      it 'renders new view' do
         post :create, params: { question: attributes_for(:invalid_question) } 
         expect(response).to render_template :new
       end
+    end
+  end
+
+  describe 'GET #show' do
+    before { get :show, params: { id: question } }
+
+    it 'assings the requested question to @question' do
+      expect(assigns(:question)).to eq question
+    end
+    it 'renders show view' do
+      expect(response).to render_template :show
     end
   end
 end
