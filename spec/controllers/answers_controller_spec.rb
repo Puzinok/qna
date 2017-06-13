@@ -14,5 +14,9 @@ RSpec.describe AnswersController, type: :controller do
     it 'assings new Answer to new @answer' do
       expect(assigns(:answer)).to be_a_new(Answer)
     end
+
+    it 'renders new view' do
+      expect(response).to render_template :new
+    end
   end
 end
