@@ -16,11 +16,16 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
-    before { post :create }
     context 'with valid attributes' do
       it 'saves new question in database' do
-        expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
+        expect{ post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
+      end
+
+      it 'redirect to show view' do
+        post :create, params: { question: attributes_for(:question) }
+        expect(response).to redirect_to question_path(assigns(:question))
       end
     end
+
   end
 end
