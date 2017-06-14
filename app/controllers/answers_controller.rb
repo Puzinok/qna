@@ -9,6 +9,8 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answer_params)    
     if @answer.save
       redirect_to @answer
+    else
+      render :new
     end
   end
 
