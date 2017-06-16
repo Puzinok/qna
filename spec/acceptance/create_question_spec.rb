@@ -2,8 +2,8 @@ require 'rails_helper'
 
 feature 'Create question', %q{
   In order to get answer from community
-  an User
-  I want to able to ask question
+  An User
+  I want to be able create a question
 } do
 
   scenario 'User create the question' do
