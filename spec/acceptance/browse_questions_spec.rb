@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'Browse all questions', %q{
   In order to find question or answer
-  An user
+  As an user
   I want to be able browse all questions
 } do
 

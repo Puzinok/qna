@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'Create question', %q{
   In order to get answer from community
-  An User
+  As an User
   I want to be able create a question
 } do
 
@@ -15,4 +15,3 @@ feature 'Create question', %q{
     expect(page).to have_content 'Your question succefully created.'
   end
 end
-
