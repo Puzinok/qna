@@ -7,8 +7,7 @@ feature 'Create question', %q{
 } do
 
   scenario 'User create the question' do
-    visit '/questions'
-    click_on 'Ask question'
+    visit new_question_path
     fill_in 'Title', with: 'Test title'
     fill_in 'Body', with: 'Test Question'
     click_on 'Create'
