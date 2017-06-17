@@ -4,6 +4,9 @@ h1
 p
   = @question.body
 
+- @question.answers.each do |answer|
+  = answer.body
+
 = form_for ([@question, @question.answers.build]) do |f|
   = f.label :body, 'Answer'
   = f.text_area :body

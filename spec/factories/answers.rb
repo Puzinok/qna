@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :answer do
     factory :valid_answer do
-      body "MyText"
+      body "My Answer text"
       question
     end
 
