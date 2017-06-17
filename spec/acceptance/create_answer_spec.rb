@@ -19,5 +19,6 @@ feature 'Create answer the question', %q{
     visit question_path(@question)
     fill_in 'Answer', with: 'Test Answer the question'
     click_on 'Create'
+    expect(page).to have_content('Your answer succefully created.')
   end
 end
