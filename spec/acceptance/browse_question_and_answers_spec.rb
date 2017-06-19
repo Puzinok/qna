@@ -7,9 +7,9 @@ feature 'Show question and answers', %q{
 } do
   scenario 'User visit to question page' do
     @question = create(:valid_question)
-    @answer1 = create(:valid_answer, question: @question)
+    @answers = create_list(:valid_answer, 3, question: @question)
 
     visit question_path(@question)
-    expect(page).to have_content("#{ @answer1.body }")
+    expect(page).to have_css('.answer_body', count: 3)
   end
 end
