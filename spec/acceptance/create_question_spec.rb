@@ -24,7 +24,6 @@ feature 'Create question', %q{
 
   scenario "Non Authenticated User can't create question" do
     visit new_question_path
-    save_and_open_page
     expect(page).to have_content('You need to sign in or sign up before continuing.')
   end
 end
