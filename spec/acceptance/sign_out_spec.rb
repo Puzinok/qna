@@ -15,7 +15,6 @@ feature 'Singin out', %q{
     click_on 'Log in'
 
     visit root_path
-    save_and_open_page
     click_on 'Log out'
 
     expect(page).to have_content('Signed out successfully.')

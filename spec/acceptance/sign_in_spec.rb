@@ -14,7 +14,7 @@ feature 'Singin in', %q{
     fill_in 'Password', with: '12345678'
     click_on 'Log in'
 
-    expect(page).to have_content 'Signed in successfully.'
+    expect(page).to have_content('Signed in successfully.')
   end
 end
 
