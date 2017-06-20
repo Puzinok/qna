@@ -5,6 +5,7 @@ RSpec.describe AnswersController, type: :controller do
   let(:answer) { create(:valid_answer, question: question) }
 
   describe 'GET #new' do
+    login_user
     before { get :new, params: { question_id: question } }
 
     it 'assing answer @question to question' do
@@ -21,6 +22,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
+    login_user
+
     context 'with valid attributes' do
       it 'save new answer in database' do
         expect {

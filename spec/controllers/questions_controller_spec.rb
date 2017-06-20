@@ -4,6 +4,7 @@ RSpec.describe QuestionsController, type: :controller do
   let(:question) { create(:valid_question) }
 
   describe 'GET #new' do
+    login_user
     before { get :new }
 
     it 'assigns new Question to @question' do
@@ -16,6 +17,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
+    login_user
+
     context 'with valid attributes' do
       it 'saves new question in database' do
         expect {
