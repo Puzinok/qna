@@ -6,17 +6,15 @@ feature 'Create question', %q{
   I want to be able create a question
 } do
 
-  scenario 'Authenticated User can create the question' do
-    User.create!(email: 'user@example.com', password: '12345678')
+  given(:user) { create(:user) }
+  given(:question) { create(:valid_question, user: user) }
 
-    visit new_user_session_path
-    fill_in 'Email', with: 'user@example.com'
-    fill_in 'Password', with: '12345678'
-    click_on 'Log in'
+  scenario 'Authenticated User can create the question' do
+    sign_in(user)
 
     visit new_question_path
-    fill_in 'Title', with: 'Test title'
-    fill_in 'Body', with: 'Test Question'
+    fill_in 'Title', with: question.title
+    fill_in 'Body', with: question.body
     click_on 'Create'
 
     expect(page).to have_content('Your question succefully created.')
