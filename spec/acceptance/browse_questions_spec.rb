@@ -5,6 +5,7 @@ feature 'Browse all questions', %q{
   As an user
   I want to be able browse all questions
 } do
+
   given(:user) { create(:user) }
 
   scenario 'User can browse all questions' do

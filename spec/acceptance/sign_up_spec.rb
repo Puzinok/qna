@@ -8,7 +8,7 @@ feature 'Signing up', %q{
 
   scenario 'New user try to siging up' do
     visit new_user_registration_path
-    fill_in 'Email', with: 'user2@example.com'
+    fill_in 'Email', with: 'test1@example.com'
     fill_in 'Password', with: '12345678'
     fill_in 'Password confirmation', with: '12345678'
     click_on 'Sign up'
