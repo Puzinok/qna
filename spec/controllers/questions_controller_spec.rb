@@ -1,6 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
+  describe 'GET #index' do
+    let (:user) { create(:user) }
+    let (:questions) { create_list(:valid_question, 3, user: user) }
+    before { get :index }
+
+    it 'user can browse list of questions' do
+      expect(assigns(:questions)).to match_array(questions)
+    end
+
+    it 'renders index view' do
+      expect(response).to render_template :index
+    end
+  end
+
   describe 'GET #new' do
     login_user
     before { get :new }
@@ -72,7 +86,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'another authorized user' do
+    context 'another authenticate user' do
       login_user
       let(:question) { create(:valid_question, user: @user) }
 
