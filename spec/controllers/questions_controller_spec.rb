@@ -16,7 +16,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
-    login_user
+    sign_in_user
     before { get :new }
 
     it 'assigns new Question to @question' do
@@ -29,7 +29,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
-    login_user
+    sign_in_user
     let!(:question) { create(:valid_question, user: @user) }
 
     context 'with valid attributes' do
@@ -73,7 +73,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'DELETE #destroy' do
     context 'author of question' do
-      login_user
+      sign_in_user
       let!(:user_question) { create(:valid_question, user: @user) }
 
       it 'can delete the question' do
@@ -87,7 +87,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'another authenticate user' do
-      login_user
+      sign_in_user
       let(:question) { create(:valid_question, user: @user) }
 
       it 'cannot delete the question' do
