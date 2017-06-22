@@ -9,6 +9,9 @@ p
 - @question.answers.each do |answer|
   .answer_body
   = answer.body
+  - if user_signed_in? && current_user == answer.user
+    = link_to 'Delete Answer', answer, method: :delete
+
 
 = form_for ([@question, @question.answers.build]) do |f|
   = f.label :body, 'Answer'

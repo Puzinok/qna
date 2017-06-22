@@ -15,6 +15,16 @@ class AnswersController < ApplicationController
     end
   end
 
+  def destroy
+    @answer = Answer.find(params[:id])
+    if current_user == @answer.user
+      @answer.destroy
+      redirect_to @answer.question
+    else
+      redirect_to @answer.question
+    end
+  end
+
   private
 
   def set_question
@@ -22,6 +32,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body).merge(user: current_user)
   end
 end

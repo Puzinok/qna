@@ -9,6 +9,8 @@ feature 'User delete own question or answer', %q{
   given(:question) { create(:valid_question, user: user) }
   given(:another_user) { create(:user) }
 
+  given!(:answer) { create(:valid_answer, question: question, user: user) }
+
   scenario 'Author can delete the question' do
     sign_in(user)
 
@@ -24,6 +26,19 @@ feature 'User delete own question or answer', %q{
     expect(page).to_not have_content('Delete Question')
   end
 
-  scenario 'Author can delete own answer'
-  scenario 'Non Author of answer cannot delete answer'
+  scenario 'Author can delete own answer' do
+    sign_in(user)
+
+    visit question_path(question)
+    click_on 'Delete Answer'
+    expect(page).to_not have_content(answer.body)
+  end
+
+  scenario 'Non Author of answer cannot delete answer' do
+    another_user = create(:user)
+    sign_in(another_user)
+
+    visit question_path(question)
+    expect(page).to_not have_content('Delete Answer')
+  end
 end
