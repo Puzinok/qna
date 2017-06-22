@@ -3,6 +3,9 @@ h1
 p
   = @question.body
 
+- if user_signed_in? && current_user == @question.user
+  = link_to 'Delete Question', @question, method: :delete
+
 - @question.answers.each do |answer|
   .answer_body
   = answer.body
