@@ -1,9 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
+  sign_in_user
+
   describe 'GET #index' do
-    let (:user) { create(:user) }
-    let (:questions) { create_list(:valid_question, 3, user: user) }
+    let(:questions) { create_list(:valid_question, 3, user: @user) }
     before { get :index }
 
     it 'user can browse list of questions' do
@@ -16,7 +17,6 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
-    sign_in_user
     before { get :new }
 
     it 'assigns new Question to @question' do
@@ -29,7 +29,6 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
-    sign_in_user
     let!(:question) { create(:valid_question, user: @user) }
 
     context 'with valid attributes' do
@@ -73,7 +72,6 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'DELETE #destroy' do
     context 'author of question' do
-      sign_in_user
       let!(:user_question) { create(:valid_question, user: @user) }
 
       it 'can delete the question' do
@@ -87,8 +85,8 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'another authenticate user' do
-      sign_in_user
-      let(:question) { create(:valid_question, user: @user) }
+      let(:user) { create(:user) }
+      let!(:question) { create(:valid_question, user: user) }
 
       it 'cannot delete the question' do
         expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
