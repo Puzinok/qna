@@ -6,35 +6,31 @@ feature 'Create answer the question', %q{
   I want to be able to answer the question
   } do
 
-  scenario 'User can browse question page' do
-    @question = create(:valid_question)
-
-    visit question_path(@question)
-    expect(page).to have_content("#{ @question.title }")
-  end
+  given(:question){ create(:valid_question) }
+  given(:user) { create(:user) }
 
   scenario "Authenticate user can answer the question" do
-    User.create!(email: 'user@example.com', password: '12345678')
+    sign_in(user)
 
-    visit new_user_session_path
-    fill_in 'Email', with: 'user@example.com'
-    fill_in 'Password', with: '12345678'
-    click_on 'Log in'
-
-    @question = create(:valid_question)
-
-    visit question_path(@question)
+    visit question_path(question)
     fill_in 'Answer', with: 'Test Answer the question'
     click_on 'Create'
     expect(page).to have_content('Your answer succefully created.')
   end
 
   scenario "Non authenticate user cannot answer the question" do
-    @question = create(:valid_question)
-
-    visit question_path(@question)
+    visit question_path(question)
     fill_in 'Answer', with: 'Test Answer the question'
     click_on 'Create'
     expect(page).to have_content('You need to sign in or sign up before continuing.')
+  end
+
+  scenario "Create invalid answer" do
+    sign_in(user)
+
+    visit question_path(question)
+    fill_in 'Answer', with: ''
+    click_on 'Create'
+    expect(page).to have_content('Answer not created')
   end
 end
