@@ -24,4 +24,14 @@ feature 'Create question', %q{
     visit new_question_path
     expect(page).to have_content('You need to sign in or sign up before continuing.')
   end
+
+  scenario 'Try create invalid question' do
+    sign_in(user)
+
+    visit new_question_path
+    fill_in 'Title', with: ''
+    fill_in 'Body', with: ''
+    click_on 'Create'
+    expect(page).to have_content("Errors:")
+  end
 end
