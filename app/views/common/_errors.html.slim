@@ -1,6 +1,6 @@
-p
-  | Errors:
 - if resource.errors.any?
+  p
+  | Errors:
   .errors
     ul
       - resource.errors.full_messages.each do |message|
