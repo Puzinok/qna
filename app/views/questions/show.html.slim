@@ -7,10 +7,11 @@ p
   = link_to 'Delete Question', @question, method: :delete
 
 - @question.answers.each do |answer|
-  .answer_body
-  = answer.body
-  - if user_signed_in? && current_user == answer.user
-    = link_to 'Delete Answer', answer, method: :delete
+  - unless answer.new_record?
+    .answer_body
+    = answer.body
+    - if current_user&.author_of?(answer)
+      = link_to 'Delete Answer', answer, method: :delete
 
 
 = form_for ([@question, @question.answers.build]) do |f|
