@@ -7,7 +7,7 @@ feature 'Show question and answers', %q{
 } do
 
   given(:question) { create(:valid_question) }
-  given!(:answers) { create_list(:valid_answer, 3, question: question) }
+  given!(:answers) { create_list(:answer, 3, question: question) }
   given(:user) { create(:user) }
 
   scenario 'Non Authenticated user can browse question page' do

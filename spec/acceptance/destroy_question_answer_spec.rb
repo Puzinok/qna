@@ -9,7 +9,7 @@ feature 'User delete own question or answer', %q{
   given(:question) { create(:valid_question, user: user) }
   given(:another_user) { create(:user) }
 
-  given!(:answer) { create(:valid_answer, question: question, user: user) }
+  given!(:answer) { create(:answer, question: question, user: user) }
 
   scenario 'Author can delete the question' do
     sign_in(user)

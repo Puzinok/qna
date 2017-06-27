@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let!(:question) { create(:valid_question) }
-  let(:answer) { create(:valid_answer, question: question) }
+  let(:answer) { create(:answer, question: question) }
 
   describe 'POST #create' do
     context 'Authenticate user try create answer' do
@@ -12,7 +12,7 @@ RSpec.describe AnswersController, type: :controller do
         it 'save new answer in database' do
           expect {
             post :create, params: {
-              answer: attributes_for(:valid_answer),
+              answer: attributes_for(:answer),
               question_id: question,
               user: @user
             }
@@ -21,7 +21,7 @@ RSpec.describe AnswersController, type: :controller do
 
         it 'redirect to show view' do
           post :create, params: {
-            answer: attributes_for(:valid_answer),
+            answer: attributes_for(:answer),
             question_id: question,
             user: @user
           }
@@ -61,7 +61,7 @@ RSpec.describe AnswersController, type: :controller do
     sign_in_user
 
     context 'author of the answer' do
-      let!(:user_answer) { create(:valid_answer, question: question, user: @user) }
+      let!(:user_answer) { create(:answer, question: question, user: @user) }
 
       it 'can delete the answer' do
         expect { delete :destroy, params: { id: user_answer } }.to change(Answer, :count).by(-1)
@@ -75,7 +75,7 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'non author of the answer' do
       let(:user) { create(:user) }
-      let!(:answer) { create(:valid_answer, question: question, user: user) }
+      let!(:answer) { create(:answer, question: question, user: user) }
 
       it 'cannot delete the answer' do
         expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)

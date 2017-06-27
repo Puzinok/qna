@@ -1,6 +1,6 @@
 FactoryGirl.define do
-  factory :answer do
-    factory :valid_answer do
+  factory :answers, class: Answer do
+    factory :answer do
       body
       question
       user
