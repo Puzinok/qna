@@ -16,14 +16,14 @@ feature 'User delete own question or answer', %q{
 
     visit question_path(question)
     click_on 'Delete Question'
-    expect(page).to have_no_content(question.title)
+    expect(page).to have_content('Your question succefully deleted.')
   end
 
   scenario 'Another user cannot delete question' do
     sign_in(another_user)
 
     visit question_path(question)
-    expect(page).to_not have_content('Delete Question')
+    expect(page).to have_no_link('Delete Question')
   end
 
   scenario 'Author can delete own answer' do
@@ -31,14 +31,18 @@ feature 'User delete own question or answer', %q{
 
     visit question_path(question)
     click_on 'Delete Answer'
-    expect(page).to_not have_content(answer.body)
+    expect(page).to have_content('Your answer succefully deleted.')
   end
 
   scenario 'Non Author of answer cannot delete answer' do
-    another_user = create(:user)
     sign_in(another_user)
 
     visit question_path(question)
-    expect(page).to_not have_content('Delete Answer')
+    expect(page).to have_no_link('Delete Answer')
+  end
+
+  scenario 'Non Authenticated user cannot view Delete button' do
+    visit question_path(question)
+    expect(page).to have_no_link('Delete Answer')
   end
 end

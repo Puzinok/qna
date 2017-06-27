@@ -27,7 +27,7 @@ class QuestionsController < ApplicationController
     @question = Question.find(params[:id])
     if current_user.author_of?(@question)
       @question.destroy
-      redirect_to questions_path
+      redirect_to questions_path, notice: 'Your question succefully deleted.'
     else
       render :index
     end
