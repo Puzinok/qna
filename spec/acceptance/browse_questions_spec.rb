@@ -7,10 +7,15 @@ feature 'Browse all questions', %q{
 } do
 
   given(:user) { create(:user) }
+  given!(:questions) { create_list(:valid_question, 3, user: user ) }
 
   scenario 'User can browse all questions' do
-    @questions = create_list(:valid_question, 3, user: user )
-    visit '/questions'
-    expect(page).to have_css('.question_title', count: 3)
+    visit questions_path
+    expect(page).to have_content(questions.map(&:title).join)
+  end
+
+  scenario 'Authenticated user browse all questions' do
+    visit questions_path
+    expect(page).to have_content(questions.map(&:title).join)
   end
 end
