@@ -11,11 +11,13 @@ feature 'Browse all questions', %q{
 
   scenario 'User can browse all questions' do
     visit questions_path
-    expect(page).to have_content(questions.map(&:title).join)
+    expect(page).to have_content(questions.first.title)
+    expect(page).to have_content(questions.first.body)
   end
 
   scenario 'Authenticated user browse all questions' do
     visit questions_path
-    expect(page).to have_content(questions.map(&:title).join)
+    expect(page).to have_content(questions.first.title)
+    expect(page).to have_content(questions.first.body)
   end
 end
