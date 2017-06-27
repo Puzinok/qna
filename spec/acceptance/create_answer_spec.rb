@@ -31,6 +31,6 @@ feature 'Create answer the question', %q{
     visit question_path(question)
     fill_in 'Answer', with: ''
     click_on 'Create'
-    expect(page).to have_content("Errors:")
+    expect(page).to have_content('Errors:')
   end
 end
