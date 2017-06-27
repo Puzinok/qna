@@ -6,7 +6,7 @@ feature 'Show question and answers', %q{
   I want to be browse question and answers to the question
 } do
 
-  given(:question) { create(:valid_question) }
+  given(:question) { create(:question) }
   given!(:answers) { create_list(:answer, 3, question: question) }
   given(:user) { create(:user) }
 

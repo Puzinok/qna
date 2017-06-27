@@ -7,7 +7,7 @@ feature 'Browse all questions', %q{
 } do
 
   given(:user) { create(:user) }
-  given!(:questions) { create_list(:valid_question, 3, user: user ) }
+  given!(:questions) { create_list(:question, 3, user: user ) }
 
   scenario 'User can browse all questions' do
     visit questions_path

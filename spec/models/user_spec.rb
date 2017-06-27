@@ -8,7 +8,7 @@ RSpec.describe User, type: :model do
 
   context '.author_of?' do
     let(:user) { create(:user) }
-    let(:question) { create(:valid_question, user: user) }
+    let(:question) { create(:question, user: user) }
 
     it 'User is an author of resource.' do
       expect(user.author_of?(question)).to eq true

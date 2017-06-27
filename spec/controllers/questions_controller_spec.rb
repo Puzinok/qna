@@ -4,7 +4,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #index' do
     let(:user) { create(:user) }
-    let(:questions) { create_list(:valid_question, 3, user: user) }
+    let(:questions) { create_list(:question, 3, user: user) }
     before { get :index }
 
     it 'user can browse list of questions' do
@@ -18,7 +18,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #new' do
     sign_in_user
-    let(:question) { create(:valid_question, user: @user) }
+    let(:question) { create(:question, user: @user) }
     before { get :new }
 
     it 'assigns new Question to @question' do
@@ -33,17 +33,17 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'POST #create' do
     context 'Authenticated user create question' do
       sign_in_user
-      let(:question) { create(:valid_question, user: @user) }
+      let(:question) { create(:question, user: @user) }
 
       context 'with valid attributes' do
         it 'saves new question in database' do
           expect {
-            post :create, params: { question: attributes_for(:valid_question) }
+            post :create, params: { question: attributes_for(:question) }
           }.to change(Question, :count).by(1)
         end
 
         it 'redirect to show view' do
-          post :create, params: { question: attributes_for(:valid_question) }
+          post :create, params: { question: attributes_for(:question) }
           expect(response).to redirect_to question_path(assigns(:question))
         end
       end
@@ -63,7 +63,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'Non authenticate user try to create question' do
-      let(:question) { create(:valid_question) }
+      let(:question) { create(:question) }
       it 'not save question in database' do
         expect {
           post :create, params: { question: attributes_for(:invalid_question) }
@@ -79,7 +79,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #show' do
     let(:user) { create(:user) }
-    let(:question) { create(:valid_question, user: user) }
+    let(:question) { create(:question, user: user) }
     before { get :show, params: { id: question } }
 
     it 'assings the requested question to @question' do
@@ -93,7 +93,7 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'DELETE #destroy' do
     sign_in_user
     context 'question author' do
-      let!(:user_question) { create(:valid_question, user: @user) }
+      let!(:user_question) { create(:question, user: @user) }
 
       it 'can delete the question' do
         expect { delete :destroy, params: { id: user_question } }.to change(Question, :count).by(-1)
@@ -107,7 +107,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'another authenticate user' do
       let(:user) { create(:user) }
-      let!(:question) { create(:valid_question, user: user) }
+      let!(:question) { create(:question, user: user) }
 
       it 'cannot delete the question' do
         expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)

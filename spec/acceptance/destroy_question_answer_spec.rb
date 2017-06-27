@@ -6,7 +6,7 @@ feature 'User delete own question or answer', %q{
   I want to be able to delete own question or answer
 } do
   given(:user) { create(:user) }
-  given(:question) { create(:valid_question, user: user) }
+  given(:question) { create(:question, user: user) }
   given(:another_user) { create(:user) }
 
   given!(:answer) { create(:answer, question: question, user: user) }
