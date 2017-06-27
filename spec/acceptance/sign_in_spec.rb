@@ -19,4 +19,3 @@ feature 'Singin in', %q{
     expect(page).to have_content('Invalid Email or password.')
   end
 end
-

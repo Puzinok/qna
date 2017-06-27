@@ -6,7 +6,7 @@ feature 'Create answer the question', %q{
   I want to be able to answer the question
   } do
 
-  given(:question){ create(:question) }
+  given(:question) { create(:question) }
   given(:user) { create(:user) }
 
   scenario "Authenticate user can answer the question" do
