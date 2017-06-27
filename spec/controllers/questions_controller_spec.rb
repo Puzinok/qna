@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  sign_in_user
 
   describe 'GET #index' do
-    let(:questions) { create_list(:valid_question, 3, user: @user) }
+    let(:user) { create(:user) }
+    let(:questions) { create_list(:valid_question, 3, user: user) }
     before { get :index }
 
     it 'user can browse list of questions' do
@@ -17,6 +17,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
+    sign_in_user
+    let(:question) { create(:valid_question, user: @user) }
     before { get :new }
 
     it 'assigns new Question to @question' do
@@ -29,37 +31,55 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
-    let!(:question) { create(:valid_question, user: @user) }
+    context 'Authenticated user create question' do
+      sign_in_user
+      let(:question) { create(:valid_question, user: @user) }
 
-    context 'with valid attributes' do
-      it 'saves new question in database' do
-        expect {
+      context 'with valid attributes' do
+        it 'saves new question in database' do
+          expect {
+            post :create, params: { question: attributes_for(:valid_question) }
+          }.to change(Question, :count).by(1)
+        end
+
+        it 'redirect to show view' do
           post :create, params: { question: attributes_for(:valid_question) }
-        }.to change(Question, :count).by(1)
+          expect(response).to redirect_to question_path(assigns(:question))
+        end
       end
 
-      it 'redirect to show view' do
-        post :create, params: { question: attributes_for(:valid_question) }
-        expect(response).to redirect_to question_path(assigns(:question))
+      context 'with invalid attributes' do
+        it 'not save invalid question in database' do
+          expect {
+            post :create, params: { question: attributes_for(:invalid_question) }
+          }.to_not change(Question, :count)
+        end
+
+        it 'renders new view' do
+          post :create, params: { question: attributes_for(:invalid_question) }
+          expect(response).to render_template :new
+        end
       end
     end
 
-    context 'with invalid attributes' do
-      it 'not save invalid question in database' do
+    context 'Non authenticate user try to create question' do
+      let(:question) { create(:valid_question) }
+      it 'not save question in database' do
         expect {
           post :create, params: { question: attributes_for(:invalid_question) }
         }.to_not change(Question, :count)
       end
 
-      it 'renders new view' do
+      it 'redirect to sign_in page' do
         post :create, params: { question: attributes_for(:invalid_question) }
-        expect(response).to render_template :new
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end
 
   describe 'GET #show' do
-    let(:question) { create(:valid_question) }
+    let(:user) { create(:user) }
+    let(:question) { create(:valid_question, user: user) }
     before { get :show, params: { id: question } }
 
     it 'assings the requested question to @question' do
@@ -71,11 +91,12 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    context 'author of question' do
+    sign_in_user
+    context 'question author' do
       let!(:user_question) { create(:valid_question, user: @user) }
 
       it 'can delete the question' do
-        expect { delete :destroy, params: { id: user_question } }.to change(@user.questions, :count).by(-1)
+        expect { delete :destroy, params: { id: user_question } }.to change(Question, :count).by(-1)
       end
 
       it 'redirect to index view' do
