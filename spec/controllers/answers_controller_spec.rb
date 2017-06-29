@@ -46,44 +46,49 @@ RSpec.describe AnswersController, type: :controller do
     context 'Non authenticate user try create answer' do
       it 'doesnt save new answer in database' do
         expect {
-          post :create, params: { answer: attributes_for(:invalid_answer), question_id: question, user: nil }
+          post :create, params: { answer: attributes_for(:answer), question_id: question}
         }.to_not change(Answer, :count)
       end
 
       it 'redirect to sign_in page' do
-        post :create, params: { answer: attributes_for(:invalid_answer), question_id: question }
+        post :create, params: { answer: attributes_for(:answer), question_id: question }
         expect(response).to redirect_to new_user_session_path
       end
     end
   end
 
   describe 'DELETE #destroy' do
-    sign_in_user
+    context 'Authenticated user try create question' do
+      sign_in_user
 
-    context 'author of the answer' do
-      let!(:user_answer) { create(:answer, question: question, user: @user) }
+      context 'author of the answer' do
+        let!(:user_answer) { create(:answer, question: question, user: @user) }
 
-      it 'can delete the answer' do
-        expect { delete :destroy, params: { id: user_answer } }.to change(Answer, :count).by(-1)
+        it 'can delete the answer' do
+          expect { delete :destroy, params: { id: user_answer } }.to change(Answer, :count).by(-1)
+        end
+
+        it 'redirect to question page' do
+          delete :destroy, params: { id: user_answer }
+          expect(response).to redirect_to user_answer.question
+        end
       end
 
-      it 'redirect to question page' do
-        delete :destroy, params: { id: user_answer }
-        expect(response).to redirect_to user_answer.question
+      context 'non author of the answer' do
+        let(:user) { create(:user) }
+        let!(:answer) { create(:answer, question: question, user: user) }
+
+        it 'cannot delete the answer' do
+          expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
+        end
       end
     end
 
-    context 'non author of the answer' do
-      let(:user) { create(:user) }
-      let!(:answer) { create(:answer, question: question, user: user) }
+    context 'Non authenticated user try delete answer' do
+      let!(:answer) { create(:answer, question: question) }
 
-      it 'cannot delete the answer' do
+      it 'doesnt delete answer from database' do
         expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
-      end
-
-      it 're-render question show page' do
-        delete :destroy, params: { id: answer }
-        expect(response).to render_template 'questions/show'
       end
     end
   end
