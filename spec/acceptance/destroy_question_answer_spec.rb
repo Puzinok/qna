@@ -16,7 +16,8 @@ feature 'User delete own question or answer', %q{
 
     visit question_path(question)
     click_on 'Delete Question'
-    expect(page).to have_content('Your question succefully deleted.')
+    expect(page).to have_no_content(question.title)
+    expect(page).to have_no_content(question.body)
   end
 
   scenario 'Another user cannot delete question' do
@@ -31,7 +32,7 @@ feature 'User delete own question or answer', %q{
 
     visit question_path(question)
     click_on 'Delete Answer'
-    expect(page).to have_content('Your answer succefully deleted.')
+    expect(page).to have_no_content(answer.body)
   end
 
   scenario 'Non Author of answer cannot delete answer' do

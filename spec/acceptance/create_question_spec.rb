@@ -17,7 +17,8 @@ feature 'Create question', %q{
       fill_in 'Body', with: question.body
       click_on 'Create'
 
-      expect(page).to have_content('Your question succefully created.')
+      expect(page).to have_content(question.title)
+      expect(page).to have_content(question.body)
     end
 
     scenario 'cannot create invalid question' do
