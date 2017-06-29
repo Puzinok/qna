@@ -10,10 +10,12 @@ feature 'Show question and answers', %q{
   given!(:answers) { create_list(:answer, 3, question: question) }
   given(:user) { create(:user) }
 
-  scenario 'Non Authenticated user can browse question page' do
+  scenario 'Non Authenticated user browse question, answers' do
     visit question_path(question)
     expect(page).to have_content(question.body)
-    expect(page).to have_content(answers.map(&:body).join)
+    answers.each do |answer|
+      expect(page).to have_content(answer.body)
+    end
   end
 
   scenario 'Authenticated user browse question, answers' do
@@ -21,6 +23,8 @@ feature 'Show question and answers', %q{
     visit question_path(question)
 
     expect(page).to have_content(question.body)
-    expect(page).to have_content(answers.map(&:body).join)
+    answers.each do |answer|
+      expect(page).to have_content(answer.body)
+    end
   end
 end
