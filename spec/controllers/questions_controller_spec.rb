@@ -38,7 +38,7 @@ RSpec.describe QuestionsController, type: :controller do
             post :create, params: { question: attributes_for(:question) }
           }.to change(Question, :count).by(1)
 
-         expect(assigns(:question).user).to eq @user
+          expect(assigns(:question).user).to eq @user
         end
 
         it 'redirect to show view' do

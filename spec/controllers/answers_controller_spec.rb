@@ -45,7 +45,7 @@ RSpec.describe AnswersController, type: :controller do
     context 'Non authenticate user try create answer' do
       it 'doesnt save new answer in database' do
         expect {
-          post :create, params: { answer: attributes_for(:answer), question_id: question}
+          post :create, params: { answer: attributes_for(:answer), question_id: question }
         }.to_not change(Answer, :count)
       end
 
