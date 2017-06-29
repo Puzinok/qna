@@ -15,5 +15,12 @@ feature 'Singin out', %q{
     click_on 'Log out'
 
     expect(page).to have_content('Signed out successfully.')
+    expect(page).to have_link('Sign in')
+  end
+
+  scenario 'Unregistered user try to sign out' do
+    visit root_path
+
+    expect(page).to have_no_link('Log out')
   end
 end
