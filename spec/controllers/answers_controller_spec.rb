@@ -79,6 +79,11 @@ RSpec.describe AnswersController, type: :controller do
         it 'cannot delete the answer' do
           expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
         end
+
+        it 'redirect to question page' do
+          delete :destroy, params: { id: answer }
+          expect(response).to redirect_to answer.question
+        end
       end
     end
 
@@ -87,6 +92,11 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'doesnt delete answer from database' do
         expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
+      end
+
+      it 'redirect to sign in page' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end
