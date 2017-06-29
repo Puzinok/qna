@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe QuestionsController, type: :controller do
+RSpec.describe  QuestionsController, type: :controller do
   describe 'GET #index' do
     let(:user) { create(:user) }
     let(:questions) { create_list(:question, 3, user: user) }
@@ -88,8 +88,9 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    context 'Autheticated user delete question' do
+    context 'Autheticated user' do
       sign_in_user
+
       context 'question author' do
         let!(:user_question) { create(:question, user: @user) }
 
@@ -103,19 +104,29 @@ RSpec.describe QuestionsController, type: :controller do
         end
       end
 
-      context 'another authenticate user' do
+      context 'another authenticated user' do
         let!(:question) { create(:question) }
-
         it 'cannot delete the question' do
           expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
+        end
+
+        it 'redirect to questions index' do
+          delete :destroy, params: { id: question }
+          expect(response).to redirect_to questions_path
         end
       end
     end
 
     context 'Non authenticate user try to delete question' do
       let!(:question) { create(:question) }
+
       it 'doestn delete question from database' do
         expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
+      end
+
+      it ('redirect to sign in page') do
+        delete :destroy, params: { id: question }
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end
