@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let!(:question) { create(:question) }
-  let(:answer) { create(:answer, question: question) }
+  let(:question) { create(:question) }
 
   describe 'POST #create' do
     context 'Authenticate user try create answer' do
@@ -13,17 +12,17 @@ RSpec.describe AnswersController, type: :controller do
           expect {
             post :create, params: {
               answer: attributes_for(:answer),
-              question_id: question,
-              user: @user
+              question_id: question
             }
           }.to change(question.answers, :count).by(1)
+
+          expect(assigns(:answer).user).to eq @user
         end
 
         it 'redirect to show view' do
           post :create, params: {
             answer: attributes_for(:answer),
-            question_id: question,
-            user: @user
+            question_id: question
           }
           expect(response).to redirect_to question_path(assigns(:question))
         end
@@ -61,7 +60,7 @@ RSpec.describe AnswersController, type: :controller do
     context 'Authenticated user try create question' do
       sign_in_user
 
-      context 'author of the answer' do
+      context 'author the answer' do
         let!(:user_answer) { create(:answer, question: question, user: @user) }
 
         it 'can delete the answer' do
@@ -75,8 +74,7 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       context 'non author of the answer' do
-        let(:user) { create(:user) }
-        let!(:answer) { create(:answer, question: question, user: user) }
+        let!(:answer) { create(:answer) }
 
         it 'cannot delete the answer' do
           expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
@@ -85,7 +83,7 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'Non authenticated user try delete answer' do
-      let!(:answer) { create(:answer, question: question) }
+      let!(:answer) { create(:answer) }
 
       it 'doesnt delete answer from database' do
         expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)

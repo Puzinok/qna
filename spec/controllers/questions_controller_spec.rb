@@ -17,7 +17,6 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #new' do
     sign_in_user
-    let(:question) { create(:question, user: @user) }
     before { get :new }
 
     it 'assigns new Question to @question' do
@@ -32,13 +31,14 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'POST #create' do
     context 'Authenticated user create question' do
       sign_in_user
-      let(:question) { create(:question, user: @user) }
 
       context 'with valid attributes' do
         it 'saves new question in database' do
           expect {
             post :create, params: { question: attributes_for(:question) }
           }.to change(Question, :count).by(1)
+
+         expect(assigns(:question).user).to eq @user
         end
 
         it 'redirect to show view' do
@@ -62,7 +62,6 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'Non authenticate user try to create question' do
-      let(:question) { create(:question) }
       it 'not save question in database' do
         expect {
           post :create, params: { question: attributes_for(:question) }
@@ -77,8 +76,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:user) { create(:user) }
-    let(:question) { create(:question, user: user) }
+    let(:question) { create(:question) }
     before { get :show, params: { id: question } }
 
     it 'assings the requested question to @question' do
@@ -106,8 +104,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       context 'another authenticate user' do
-        let(:user) { create(:user) }
-        let!(:question) { create(:question, user: user) }
+        let!(:question) { create(:question) }
 
         it 'cannot delete the question' do
           expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
