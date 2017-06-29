@@ -8,19 +8,20 @@ feature 'Create answer the question', %q{
 
   given(:question) { create(:question) }
   given(:user) { create(:user) }
+  given(:answer) { create(:answer) }
 
-  scenario "Authenticate user can answer the question" do
+  scenario "Authenticated user can answer the question" do
     sign_in(user)
 
     visit question_path(question)
-    fill_in 'Answer', with: 'Test Answer the question'
+    fill_in 'Answer', with: answer.body
     click_on 'Create'
-    expect(page).to have_content('Your answer succefully created.')
+    expect(page).to have_content(answer.body)
   end
 
-  scenario "Non authenticate user cannot answer the question" do
+  scenario "Non authenticated user cannot answer the question" do
     visit question_path(question)
-    fill_in 'Answer', with: 'Test Answer the question'
+    fill_in 'Answer', with: answer.body
     click_on 'Create'
     expect(page).to have_content('You need to sign in or sign up before continuing.')
   end
@@ -31,6 +32,6 @@ feature 'Create answer the question', %q{
     visit question_path(question)
     fill_in 'Answer', with: ''
     click_on 'Create'
-    expect(page).to have_content('Errors:')
+    expect(page).to have_content("Body can't be blank")
   end
 end
