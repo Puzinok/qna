@@ -8,7 +8,6 @@ p
 
 .answers
   - @question.answers.each do |answer|
-    - if answer.persisted?
       .answer_body
       = answer.body
       - if current_user&.author_of?(answer)
