@@ -13,14 +13,17 @@ feature 'Create answer the question', %q{
     given(:user) { create(:user) }
     background { sign_in(user) }
 
-    scenario "can answer the question" do
+    scenario "can answer the question", js: true do
       visit question_path(question)
       fill_in 'Answer', with: answer.body
       click_on 'Create'
-      expect(page).to have_content(answer.body)
+      expect(current_path).to eq question_path(question)
+      within '.answers' do
+        expect(page).to have_content(answer.body)
+      end
     end
 
-    scenario "cannot create invalid answer" do
+    scenario "cannot create invalid answer", js: true do
       visit question_path(question)
       fill_in 'Answer', with: ''
       click_on 'Create'
