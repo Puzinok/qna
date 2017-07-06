@@ -35,6 +35,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'slim-rails'
 gem 'devise'
+gem 'jquery-rails'
 
 group :test do
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'
@@ -50,6 +51,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'rails-controller-testing'
+  gem 'database_cleaner'
 end
 
 group :development do
