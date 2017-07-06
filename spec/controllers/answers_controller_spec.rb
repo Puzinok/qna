@@ -20,7 +20,7 @@ RSpec.describe AnswersController, type: :controller do
           expect(assigns(:answer).user).to eq @user
         end
 
-        it 'renders show view' do
+        it 'renders new view' do
           post :create, params: {
             answer: attributes_for(:answer),
             question_id: question,
