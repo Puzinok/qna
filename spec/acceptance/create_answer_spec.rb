@@ -23,7 +23,7 @@ feature 'Create answer the question', %q{
       end
     end
 
-    scenario "cannot create invalid answer", js: true do
+    scenario "cannot create invalid answer", js: true, skip: true do
       visit question_path(question)
       fill_in 'Answer', with: ''
       click_on 'Create'
