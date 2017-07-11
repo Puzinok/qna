@@ -36,6 +36,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'slim-rails'
 gem 'devise'
 gem 'jquery-rails'
+gem 'twitter-bootstrap-rails'
 
 group :test do
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'
