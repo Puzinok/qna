@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :destroy]
+  before_action :authenticate_user!, only: [:create, :destroy, :update]
 
   def create
     @question = Question.find(params[:question_id])
@@ -16,6 +16,13 @@ class AnswersController < ApplicationController
     else
       redirect_to @answer.question, notice: 'Your answer not deleted.'
     end
+  end
+
+  def update
+    @answers = Answer.all
+    @answer = Answer.find(params[:id])
+    @answer.update(answer_params) if current_user.author_of?(@answer)
+    @question = @answer.question
   end
 
   private
