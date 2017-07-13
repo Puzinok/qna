@@ -9,7 +9,9 @@ p
 .answers
   = render @question.answers
 
-= form_for [@question, @answer], remote: true do |f|
-  = f.label :body, 'Answer'
-  = f.text_area :body
-  = f.submit 'Create'
+.form-group
+  = form_for [@question, @answer], remote: true do |f|
+    = f.label :body, 'Answer'
+    .answer-errors
+    = f.text_area :body, class: 'form-control'
+    = f.submit 'Create'
