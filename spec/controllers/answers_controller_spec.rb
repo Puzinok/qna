@@ -110,4 +110,74 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #update' do
+    context "Non authenticate try edit answer" do
+      let!(:answer){ create(:answer, question: question) }
+
+      it "doesn't update answer in database" do
+        patch :update, params: { id: answer, question_id: question, answer: { body: 'edited body' } }
+        answer.reload
+        expect(answer.body).to_not eq 'edited body'
+      end
+
+      it 'redirect to sign in page' do
+        patch :update, params: { id: answer, question_id: question, answer: { body: 'edited body' } }
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context "Non author can't edit answer" do
+      sign_in_user
+      let(:user){ create(:user) }
+      let(:answer){ create(:answer, question: question, user: user) }
+
+      it "doesn't update answer in database" do
+        patch :update, params: { id: answer, question_id: question, answer: { body: 'edited body' } }, format: :js
+        answer.reload
+        expect(answer.body).to_not eq 'edited body'
+      end
+    end
+
+    context "Author can edit answer" do
+      sign_in_user
+      let(:answer){ create(:answer, question: question, user: @user) }
+
+      it 'assings the requested answer to @answer' do
+        patch :update, params: { id: answer, question_id: question, answer: attributes_for(:answer) }, format: :js
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'assings antwer to question' do
+        patch :update, params: { id: answer, question_id: question, answer: attributes_for(:answer) }, format: :js
+        expect(assigns(:question)).to eq question
+      end
+
+      context 'with valid attributes' do
+        it 'change answer attributes' do
+          patch :update, params: { id: answer, question_id: question, answer: { body: 'edited body'} }, format: :js
+          answer.reload
+          expect(answer.body).to eq 'edited body'
+        end
+
+        it 'rerender update view' do
+          patch :update, params: { id: answer, question_id: question, answer: attributes_for(:answer) }, format: :js
+          expect(response).to render_template :update
+        end
+      end
+
+      context 'with invalid attributes' do
+        it "doesn't update answer in datebase" do
+          patch :update, params: { id: answer, question_id: question, answer: attributes_for(:invalid_answer) }, format: :js
+          answer.reload
+          expect(answer.body).to eq answer.body
+        end
+
+        it 'rerender update view' do
+          patch :update, params: { id: answer, question_id: question, answer: attributes_for(:invalid_answer) }, format: :js
+          expect(response).to render_template :update
+        end
+      end
+    end
+  end
 end
