@@ -1,0 +1,19 @@
+.question
+  .panel.panel-info
+    .panel-heading
+      h3.panel-title = question.title
+    .panel-body = question.body
+
+  - if current_user&.author_of?(question)
+      = link_to 'Delete Question', question, method: :delete
+      br
+      = link_to 'Edit', '', class: 'edit-question-link'
+
+      .form-group
+        = form_for question, html: { id: 'edit-question' }, remote: true do |f|
+          .question-errors
+          = f.label :title
+          = f.text_field :title, class: 'form-control'
+          = f.label :body
+          = f.text_area :body, class: 'form-control'
+          = f.submit 'Save'

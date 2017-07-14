@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :destroy]
+  before_action :authenticate_user!, only: [:new, :create, :destroy, :update]
 
   def index
     @questions = Question.all
@@ -31,6 +31,11 @@ class QuestionsController < ApplicationController
     else
       redirect_to questions_path, notice: 'Your question not deleted.'
     end
+  end
+
+  def update
+    @question = Question.find(params[:id])
+    @question.update(question_params) if current_user.author_of?(@question)
   end
 
   private
