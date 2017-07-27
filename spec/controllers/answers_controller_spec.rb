@@ -175,4 +175,55 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe "PATCH #choose_best" do
+    context 'Author of question can choose the best answer' do
+      context 'Author' do
+        sign_in_user
+        let(:author_question){ create(:question, user: @user) }
+        let(:answer){ create(:answer, question: author_question) }
+
+        it "try change 'best' attribute to true" do
+          patch :choose_best, params: { answer_id: answer.id }, format: :js
+          answer.reload
+          expect(answer.best).to eq true
+        end
+
+        it 'render update view' do
+          patch :choose_best, params: { answer_id: answer.id }, format: :js
+          expect(response).to render_template :choose_best
+        end
+      end
+
+      context 'Authenticate user' do
+        sign_in_user
+        let(:author){create(:user)}
+        let(:author_question){ create(:question, user: author) }
+        let(:answer){ create(:answer, question: author_question) }
+
+        it "try change 'best' attribute to true" do
+          patch :choose_best, params: { answer_id: answer.id }, format: :js
+          answer.reload
+          expect(answer.best).to eq false
+        end
+      end
+
+      context 'Non aunthenticate user' do
+        let(:author){create(:user)}
+        let(:author_question){ create(:question, user: author) }
+        let(:answer){ create(:answer, question: author_question) }
+
+        it "try change 'best' attribute to true" do
+          patch :choose_best, params: { answer_id: answer.id }, format: :js
+          answer.reload
+          expect(answer.best).to eq false
+        end
+
+        it "redirect to sign page" do
+          patch :choose_best, params: { answer_id: answer.id }
+          expect(response).to redirect_to new_user_session_path
+        end
+      end
+    end
+  end
 end
