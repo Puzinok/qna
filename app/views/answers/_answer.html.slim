@@ -1,7 +1,13 @@
 div id="answer_body_#{answer.id}"
   .well.well-sm
     - if answer.persisted?
+      - if answer.best
+        p.text-success Best answer
       = answer.body
+      p
+    - if current_user&.author_of?(@question) && !answer.best
+      = link_to 'Best', answer_choose_best_path(answer), method: :patch, remote: true
+
 
     - if current_user&.author_of?(answer)
       = form_for answer, html: { id: "edit-answer-#{answer.id}" }, remote: true do |f|
