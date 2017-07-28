@@ -108,7 +108,7 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'PATCH #update' do
     context "Non authenticate try edit answer" do
-      let!(:answer){ create(:answer, question: question) }
+      let!(:answer) { create(:answer, question: question) }
 
       it "doesn't update answer in database" do
         patch :update, params: { id: answer, question_id: question, answer: { body: 'edited body' } }
@@ -124,8 +124,8 @@ RSpec.describe AnswersController, type: :controller do
 
     context "Non author can't edit answer" do
       sign_in_user
-      let(:user){ create(:user) }
-      let(:answer){ create(:answer, question: question, user: user) }
+      let(:user) { create(:user) }
+      let(:answer) { create(:answer, question: question, user: user) }
 
       it "doesn't update answer in database" do
         patch :update, params: { id: answer, question_id: question, answer: { body: 'edited body' } }, format: :js
@@ -136,7 +136,7 @@ RSpec.describe AnswersController, type: :controller do
 
     context "Author can edit answer" do
       sign_in_user
-      let(:answer){ create(:answer, question: question, user: @user) }
+      let(:answer) { create(:answer, question: question, user: @user) }
 
       it 'assings the requested answer to @answer' do
         patch :update, params: { id: answer, question_id: question, answer: attributes_for(:answer) }, format: :js
@@ -150,7 +150,7 @@ RSpec.describe AnswersController, type: :controller do
 
       context 'with valid attributes' do
         it 'change answer attributes' do
-          patch :update, params: { id: answer, question_id: question, answer: { body: 'edited body'} }, format: :js
+          patch :update, params: { id: answer, question_id: question, answer: { body: 'edited body' } }, format: :js
           answer.reload
           expect(answer.body).to eq 'edited body'
         end
@@ -180,8 +180,8 @@ RSpec.describe AnswersController, type: :controller do
     context 'Author of question can choose the best answer' do
       context 'Author' do
         sign_in_user
-        let(:author_question){ create(:question, user: @user) }
-        let(:answer){ create(:answer, question: author_question) }
+        let(:author_question) { create(:question, user: @user) }
+        let(:answer) { create(:answer, question: author_question) }
 
         it "try change 'best' attribute to true" do
           patch :choose_best, params: { answer_id: answer.id }, format: :js
@@ -197,9 +197,9 @@ RSpec.describe AnswersController, type: :controller do
 
       context 'Authenticate user' do
         sign_in_user
-        let(:author){create(:user)}
-        let(:author_question){ create(:question, user: author) }
-        let(:answer){ create(:answer, question: author_question) }
+        let(:author) { create(:user) }
+        let(:author_question) { create(:question, user: author) }
+        let(:answer) { create(:answer, question: author_question) }
 
         it "try change 'best' attribute to true" do
           patch :choose_best, params: { answer_id: answer.id }, format: :js
@@ -209,9 +209,9 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       context 'Non aunthenticate user' do
-        let(:author){create(:user)}
-        let(:author_question){ create(:question, user: author) }
-        let(:answer){ create(:answer, question: author_question) }
+        let(:author) { create(:user) }
+        let(:author_question) { create(:question, user: author) }
+        let(:answer) { create(:answer, question: author_question) }
 
         it "try change 'best' attribute to true" do
           patch :choose_best, params: { answer_id: answer.id }, format: :js

@@ -59,11 +59,13 @@ feature 'Choose the best answer', %q{
     scenario "the best answer becomes first in list", js: true do
       sign_in(user)
       visit question_path(author_question)
+
       within '.answers' do
-        expect(first('div')).to have_content('Best answer')
+        first_answer = find(:css, 'div:first-child')
+        expect(first_answer).to have_content('Best answer')
 
         click_link('Best', match: :first)
-        expect(first('div')).to have_content('Best answer')
+        expect(first_answer).to have_content('Best answer')
       end
     end
   end

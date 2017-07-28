@@ -6,10 +6,10 @@ feature 'Answer editing', %q{
   I want to be able edit my answer
 } do
 
-  given(:user){ create(:user) }
-  given(:another_user){ create(:user) }
-  given!(:question){ create(:question) }
-  given!(:answer){ create(:answer, question: question) }
+  given(:user) { create(:user) }
+  given(:another_user) { create(:user) }
+  given!(:question) { create(:question) }
+  given!(:answer) { create(:answer, question: question) }
 
   scenario 'Unauthenticated user try to edit answer' do
     visit question_path(question)
@@ -18,7 +18,7 @@ feature 'Answer editing', %q{
   end
 
   context 'Author' do
-    given!(:author_answer) {create(:answer, question: question, user: user)}
+    given!(:author_answer) { create(:answer, question: question, user: user) }
 
     before do
       sign_in(user)

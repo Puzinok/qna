@@ -9,7 +9,7 @@ RSpec.describe Answer, type: :model do
   describe '#toggle_best!' do
     let(:question) { create(:question) }
     let(:answer) { create(:answer, question: question) }
-    let!(:another_answer){ create(:answer, question: question, best: :true) }
+    let!(:another_answer) { create(:answer, question: question, best: :true) }
 
     it 'Choose best answer' do
       expect(answer.toggle_best!).to eq true

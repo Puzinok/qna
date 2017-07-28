@@ -6,8 +6,8 @@ class Answer < ApplicationRecord
 
   def toggle_best!
     self.best = :true
-    previous_best_answer = self.question.answers.find_by(best: true)
+    previous_best_answer = question.answers.find_by(best: true)
     previous_best_answer&.update_column :best, :false
-    self.save
+    save
   end
 end
