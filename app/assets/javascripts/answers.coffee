@@ -9,6 +9,9 @@ ready = ->
     answer_id = $(this).data('answerId');
     $('form#edit-answer-' + answer_id).show();
 
+  best_answer = $('#marked_best').parent();
+  $(best_answer).prependTo('.answers');
+
 $(document).ready(ready)
 $(document).on('page:load', ready)
 $(document).on('page:update', ready)

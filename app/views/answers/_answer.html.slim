@@ -1,8 +1,7 @@
-div id="answer_body_#{answer.id}"
-  .well.well-sm
+div.well.well-sm id="answer_body_#{answer.id}"
     - if answer.persisted?
       - if answer.best
-        p.text-success Best answer
+        p.text-success id='marked_best' Best answer
       = answer.body
       p
     - if current_user&.author_of?(@question) && !answer.best

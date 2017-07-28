@@ -6,9 +6,9 @@ feature 'Choose the best answer', %q{
   I want to be able choose the best answer
 } do
 
-  given(:question){ create(:question) }
+  given(:question) { create(:question) }
   given!(:answer) { create(:answer, question: question) }
-  given(:user){ create(:user) }
+  given(:user) { create(:user) }
 
   scenario 'Non authenticade user try choose the best answer' do
     visit question_path(question)
@@ -16,17 +16,16 @@ feature 'Choose the best answer', %q{
   end
 
   scenario 'Not author try choose the best answer' do
-
     sign_in(user)
     visit question_path(question)
     expect(page).to_not have_link('Best')
   end
 
-
   context 'Author of question' do
     given(:author_question) { create(:question, user: user) }
     given!(:answer) { create(:answer, question: author_question) }
-    given!(:best_answer) { create(:answer, question: author_question, best: true)}
+    given!(:best_answer) { create(:answer, question: author_question, best: true) }
+    given!(:answer_3) { create(:answer, question: author_question) }
 
     scenario "see link 'Best'" do
       sign_in(user)
@@ -40,7 +39,7 @@ feature 'Choose the best answer', %q{
       visit question_path(author_question)
 
       within '.answers' do
-        click_on('Best')
+        click_link('Best', match: :first)
         expect(page).to have_content('Best answer')
       end
     end
@@ -50,11 +49,21 @@ feature 'Choose the best answer', %q{
       visit question_path(author_question)
 
       within '.answers' do
-        click_on('Best')
-        expect(page).to have_content('Best answer')
+        2.times do
+          click_link('Best', match: :first)
+          expect(page).to have_content('Best answer')
+        end
+      end
+    end
 
-        click_on('Best')
-        expect(page).to have_content('Best answer')
+    scenario "the best answer becomes first in list", js: true do
+      sign_in(user)
+      visit question_path(author_question)
+      within '.answers' do
+        expect(first('div')).to have_content('Best answer')
+
+        click_link('Best', match: :first)
+        expect(first('div')).to have_content('Best answer')
       end
     end
   end
