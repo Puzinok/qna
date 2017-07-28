@@ -1,5 +1,5 @@
 <% if @answer.errors.present? %>
     $('.answer-errors').html('<%= j render 'common/errors', resource: @answer %>');
 <% else %>
-    $('.answers').html('<%= j render @answers %>');
+    $('#answer_body_<%= "#{@answer.id}" %>').replaceWith('<%= j render @answer %>');
 <% end %>
