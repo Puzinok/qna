@@ -22,7 +22,7 @@ class AnswersController < ApplicationController
   def choose_best
     @answer = Answer.find(params[:answer_id])
     @question = @answer.question
-    @answers = Answer.all
+    @answers = @question.answers
 
     @answer.toggle_best! if current_user&.author_of?(@question)
   end
