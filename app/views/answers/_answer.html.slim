@@ -1,5 +1,22 @@
-.answer_body
+div.well.well-sm id="answer_body_#{answer.id}"
     - if answer.persisted?
-        = answer.body
-        - if current_user&.author_of?(answer)
-            = link_to 'Delete Answer', answer, method: :delete
+      - if answer.best
+        p.text-success id='marked_best' Best answer
+      = answer.body
+      p
+    - if current_user&.author_of?(@question) && !answer.best
+      = link_to 'Best', answer_choose_best_path(answer), method: :patch, remote: true
+
+
+    - if current_user&.author_of?(answer)
+      = form_for answer, html: { id: "edit-answer-#{answer.id}" }, remote: true do |f|
+        .form-group
+          = f.label :body, 'Answer:'
+          .answer-errors
+          = f.text_area :body, class: 'form-control'
+          = f.submit 'Save'
+
+      br
+      = link_to 'Delete Answer', answer, method: :delete, remote: true
+      br
+      = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }

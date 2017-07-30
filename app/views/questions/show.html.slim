@@ -1,15 +1,11 @@
-h1
-  = @question.title
-p
-  = @question.body
-
-- if current_user&.author_of?(@question)
-  = link_to 'Delete Question', @question, method: :delete
-
+= render @question
+hr
 .answers
   = render @question.answers
 
-= form_for [@question, @answer], remote: true do |f|
-  = f.label :body, 'Answer'
-  = f.text_area :body
-  = f.submit 'Create'
+.form-group
+  = form_for [@question, @answer], remote: true do |f|
+    = f.label :body, 'Answer'
+    .answer-errors
+    = f.text_area :body, class: 'form-control'
+    = f.submit 'Create'

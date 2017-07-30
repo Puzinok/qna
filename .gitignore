@@ -46,3 +46,9 @@ bower.json
 # VSCode
 /.vscode
 /.vscode/*
+
+# Docs
+/doc
+/doc/*
+/.yardoc
+/.yardoc/*

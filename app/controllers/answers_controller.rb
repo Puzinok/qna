@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :destroy]
+  before_action :authenticate_user!, only: [:create, :destroy, :update, :choose_best]
 
   def create
     @question = Question.find(params[:question_id])
@@ -10,12 +10,21 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer = Answer.find(params[:id])
-    if current_user&.author_of?(@answer)
-      @answer.destroy
-      redirect_to @answer.question, notice: 'Your answer succefully deleted.'
-    else
-      redirect_to @answer.question, notice: 'Your answer not deleted.'
-    end
+    @answer.destroy if current_user&.author_of?(@answer)
+  end
+
+  def update
+    @answer = Answer.find(params[:id])
+    @answer.update(answer_params) if current_user.author_of?(@answer)
+    @question = @answer.question
+  end
+
+  def choose_best
+    @answer = Answer.find(params[:answer_id])
+    @question = @answer.question
+    @answers = @question.answers
+
+    @answer.toggle_best! if current_user&.author_of?(@question)
   end
 
   private

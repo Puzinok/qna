@@ -124,9 +124,79 @@ RSpec.describe  QuestionsController, type: :controller do
         expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
       end
 
-      it ('redirect to sign in page') do
+      it 'redirect to sign in page' do
         delete :destroy, params: { id: question }
         expect(response).to redirect_to new_user_session_path
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+    context "Non authenticate try edit question" do
+      let(:question) { create(:question) }
+
+      it "doesn't update question in database" do
+        patch :update, params: { id: question, question: { body: 'edited body', title: 'edited title' } }
+        question.reload
+        expect(question).to_not have_attributes(body: 'edited body', title: 'edited title')
+      end
+
+      it 'redirect to sign in page' do
+        patch :update, params: { id: question, question: { body: 'edited body', title: 'edited title' } }
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context "Non author can't edit question" do
+      sign_in_user
+      let(:user) { create(:user) }
+      let(:question) { create(:question, user: user) }
+
+      it "doesn't update question in database" do
+        patch :update, params: { id: question, question: { title: 'edited title', body: 'edited body' } }, format: :js
+        question.reload
+        expect(question).to_not have_attributes(title: 'edited title', body: 'edited body')
+      end
+    end
+
+    context "Author can edit question" do
+      sign_in_user
+      let(:question) { create(:question, user: @user) }
+
+      it 'assings the requested question to @question' do
+        patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'assings question to @question' do
+        patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
+        expect(assigns(:question)).to eq question
+      end
+
+      context 'with valid attributes' do
+        it 'change question attributes' do
+          patch :update, params: { id: question, question: { title: 'edited title', body: 'edited body' } }, format: :js
+          question.reload
+          expect(question).to have_attributes(title: 'edited title', body: 'edited body')
+        end
+
+        it 'rerender update view' do
+          patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
+          expect(response).to render_template :update
+        end
+      end
+
+      context 'with invalid attributes' do
+        it "doesn't update question in datebase" do
+          patch :update, params: { id: question, question: { title: '', body: '' } }, format: :js
+          question.reload
+          expect(question).to_not have_attributes(title: '', body: '')
+        end
+
+        it 'rerender update view' do
+          patch :update, params: { id: question, question: attributes_for(:invalid_question) }, format: :js
+          expect(response).to render_template :update
+        end
       end
     end
   end
