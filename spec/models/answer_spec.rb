@@ -5,6 +5,7 @@ RSpec.describe Answer, type: :model do
   it { should belong_to(:question) }
   it { should have_db_index(:question_id) }
   it { should belong_to(:user) }
+  it { should have_many(:attachments) }
 
   describe '#toggle_best!' do
     let(:question) { create(:question) }
