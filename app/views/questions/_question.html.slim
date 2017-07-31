@@ -2,7 +2,12 @@
   .panel.panel-info
     .panel-heading
       h3.panel-title = question.title
-    .panel-body = question.body
+    .panel-body
+      = question.body
+      p Attachments:
+      - question.attachments.each do |a|
+        = link_to a.file.file.filename, a.file.url
+
 
   - if current_user&.author_of?(question)
       = link_to 'Delete Question', question, method: :delete
