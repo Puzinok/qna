@@ -58,10 +58,6 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
-
-  config.before(:suite) do
-    FileUtils.rm_rf(Dir["#{Rails.root}/public/uploads"]) if Rails.env.test?
-  end
 end
 
 Shoulda::Matchers.configure do |config|
