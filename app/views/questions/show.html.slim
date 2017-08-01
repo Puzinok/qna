@@ -8,7 +8,9 @@ hr
     = f.label :body, 'Answer'
     .answer-errors
     = f.text_area :body, class: 'form-control'
-    = f.fields_for :attachments do |a|
-      = a.label :file
-      = a.file_field :file
-    = f.submit 'Create'
+    = f.fields_for :attachments do |attachment|
+      = render 'attachment_fields', f: attachment
+      = link_to_add_association 'add file', f, :attachments,
+      data: {'association-insertion-method': 'after', 'association-insertion-node': 'this'}
+      br
+    = f.submit 'Create', class: 'btn btn-default'
