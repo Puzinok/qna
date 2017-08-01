@@ -9,5 +9,6 @@
   .form-group
     = f.fields_for :attachments do |attachment|
       = render 'attachment_fields', f: attachment
-      = link_to_add_association 'add file', f, :attachments
+      = link_to_add_association 'add file', f, :attachments,
+      data: {'association-insertion-method': 'after', 'association-insertion-node': 'this'}
   = f.submit 'Create', class: 'btn btn-default'

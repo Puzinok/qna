@@ -7,7 +7,7 @@ feature 'Author can attach files to question', %q{
 } do
 
   given(:user) { create(:user) }
-  given(:question) { create(:question, user: user) }
+  given(:question) { create(:question) }
 
   scenario 'Author can attach file when create question' do
     sign_in(user)
@@ -32,13 +32,13 @@ feature 'Author can attach files to question', %q{
 
     click_on 'add file'
 
-    within all('.nested-fields').first do
+    within all('.nested-fields').last do
       attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
     end
 
     click_on 'Create'
 
-    expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/3/spec_helper.rb'
-    expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/2/rails_helper.rb'
+    expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/2/spec_helper.rb'
+    expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/3/rails_helper.rb'
   end
 end
