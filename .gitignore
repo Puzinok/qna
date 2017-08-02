@@ -52,3 +52,6 @@ bower.json
 /doc/*
 /.yardoc
 /.yardoc/*
+
+#uploader
+/public/uploads/*

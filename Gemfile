@@ -37,6 +37,9 @@ gem 'slim-rails'
 gem 'devise'
 gem 'jquery-rails'
 gem 'twitter-bootstrap-rails'
+gem 'carrierwave'
+gem 'remotipart', '>= 1.3'
+gem 'cocoon'
 
 group :test do
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'

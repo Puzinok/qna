@@ -26,4 +26,8 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
+
+  config.before(:suite) do
+    FileUtils.rm_rf(Rails.root.join('public', 'uploads')) if Rails.env.test?
+  end
 end

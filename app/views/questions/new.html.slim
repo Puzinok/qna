@@ -1,7 +1,14 @@
 = form_for @question do |f|
-  = render 'common/errors', resource: @question
-  = f.label :title
-  = f.text_field :title
-  = f.label :body
-  = f.text_area :body
-  = f.submit 'Create'
+  .form-group
+    = render 'common/errors', resource: @question
+    = f.label :title
+    = f.text_field :title, class: 'form-control'
+  .form-group
+    = f.label :body
+    = f.text_area :body, class: 'form-control'
+  .form-group
+    = f.fields_for :attachments do |attachment|
+      = render 'attachment_fields', f: attachment
+      = link_to_add_association 'add file', f, :attachments,
+      data: {'association-insertion-method': 'after', 'association-insertion-node': 'this'}
+  = f.submit 'Create', class: 'btn btn-default'

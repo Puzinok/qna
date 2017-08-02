@@ -51,3 +51,4 @@ AllCops:
     - spec/rails_helper.rb
     - spec/spec_helper.rb
     - db/migrate/*
+    - public/uploads/**/*

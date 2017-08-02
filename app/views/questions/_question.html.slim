@@ -2,7 +2,11 @@
   .panel.panel-info
     .panel-heading
       h3.panel-title = question.title
-    .panel-body = question.body
+    .panel-body
+      = question.body
+      #attachments
+        p Attachments:
+        = render question.attachments
 
   - if current_user&.author_of?(question)
       = link_to 'Delete Question', question, method: :delete

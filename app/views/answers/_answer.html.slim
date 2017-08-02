@@ -3,6 +3,9 @@ div.well.well-sm id="answer_body_#{answer.id}"
       - if answer.best
         p.text-success id='marked_best' Best answer
       = answer.body
+      p Attachments:
+      = render answer.attachments
+
       p
     - if current_user&.author_of?(@question) && !answer.best
       = link_to 'Best', answer_choose_best_path(answer), method: :patch, remote: true
