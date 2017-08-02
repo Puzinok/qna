@@ -14,7 +14,7 @@ feature 'Author can attach files to question', %q{
     visit new_question_path
     fill_in 'Title', with: question.title
     fill_in 'Body', with: question.body
-    attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
+    attach_file 'File', Rails.root.join('spec', 'spec_helper.rb')
     click_on 'Create'
 
     expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
@@ -27,13 +27,13 @@ feature 'Author can attach files to question', %q{
     fill_in 'Body', with: question.body
 
     within all('.nested-fields').first do
-      attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
+      attach_file 'File', Rails.root.join('spec', 'spec_helper.rb')
     end
 
     click_on 'add file'
 
     within all('.nested-fields').last do
-      attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
+      attach_file 'File', Rails.root.join('spec', 'rails_helper.rb')
     end
 
     click_on 'Create'

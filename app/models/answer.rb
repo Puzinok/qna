@@ -11,7 +11,7 @@ class Answer < ApplicationRecord
     transaction do
       previous_best_answer = question.answers.find_by(best: true)
       previous_best_answer&.update_column(:best, false)
-      self.update_column(:best, true)
+      update_column(:best, true)
     end
   end
 end
