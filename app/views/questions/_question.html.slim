@@ -6,13 +6,7 @@
       = question.body
       #attachments
         p Attachments:
-        - question.attachments.each do |a|
-          ul
-            li
-              = link_to a.file.identifier, a.file.url
-              br
-              - if current_user&.author_of?(question)
-                = link_to 'delete file', attachment_path(id: a.id), remote: true, method: :delete
+        = render question.attachments
 
   - if current_user&.author_of?(question)
       = link_to 'Delete Question', question, method: :delete
