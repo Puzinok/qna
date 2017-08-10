@@ -8,10 +8,25 @@
         p Attachments:
         = render question.attachments
 
-  - if current_user&.author_of?(question)
-      = link_to 'Delete Question', question, method: :delete
-      br
-      = link_to 'Edit', '', class: 'edit-question-link'
+    .panel-footer
+      #rating
+        #rating_msg
+        p Rating:
+        .btn-group
+          span.btn.btn-primary id = 'rating_sum' = question.rating
+          - if user_signed_in? && !current_user&.author_of?(question)
+            span#rating_controls
+              = link_to glyph(:minus), vote_against_question_path(question),
+              remote: true, method: :post, class: 'btn btn-danger vote_for'
+              = link_to glyph(:plus), vote_for_question_path(question),
+              remote: true, method: :post, class: 'btn btn-success vote_against'
+              = link_to glyph(:repeat), vote_reset_question_path(question),
+              remote: true, method: :delete, class: 'btn btn-primary vote_reset'
+
+      - if current_user&.author_of?(question)
+        .btn-group
+          = link_to 'Edit', '', class: 'edit-question-link btn btn-primary'
+          = link_to 'Delete Question', question, method: :delete, class: 'btn btn-primary'
 
       .form-group
         = form_for question, html: { id: 'edit-question' }, remote: true do |f|

@@ -10,4 +10,12 @@ class Question < ApplicationRecord
   accepts_nested_attributes_for :attachments,
                                 reject_if: proc { |attributes| attributes['file'].nil? },
                                 allow_destroy: true
+
+  def rating
+    votes.sum(:value)
+  end
+
+  def voted?(user)
+    votes.find_by(user: user)
+  end
 end

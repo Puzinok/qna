@@ -6,6 +6,11 @@ Rails.application.routes.draw do
     resources :answers, shallow: true do
       patch :choose_best
     end
+    member do
+      post :vote_for
+      post :vote_against
+      delete :vote_reset
+    end
   end
 
   resources :attachments, only: [:destroy]
