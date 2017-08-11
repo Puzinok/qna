@@ -226,4 +226,162 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'POST #vote_for' do
+    let(:answer) { create(:answer) }
+
+    context 'Non authenticate user' do
+      it 'can not change vote' do
+        expect{ post :vote_for, params: { id: answer } }.to_not change(Vote, :count)
+      end
+
+      it 'redirect to sign_in page' do
+        post :vote_for, params: { id: answer }
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'Author of answer' do
+      sign_in_user
+      let(:author_answer) { create(:answer, user: @user) }
+
+      it 'can not change vote' do
+        expect{ post :vote_for, params: { id: author_answer } }
+        .to_not change(author_answer.votes, :count)
+      end
+    end
+
+    context 'Authenticate user' do
+      sign_in_user
+
+      context 'can vote for answer' do
+        it 'should increment vote in db' do
+          expect{ post :vote_for, params: { id: answer } }.to change(answer, :rating).by(1)
+        end
+
+        it 'response rating in json' do
+          post :vote_for, params: { id: answer }
+
+          expect(response).to have_http_status(:ok)
+          expect(JSON.parse(response.body)["rating"]).to eq 1
+        end
+      end
+
+      context 'can vote once' do
+        let!(:vote) { create(:vote, votable: answer, user: @user, value: 1) }
+
+        it 'doesnt change vote in db ' do
+          expect{ post :vote_for, params: { id: answer } }.to_not change(answer, :rating)
+        end
+
+        it 'resonse error json' do
+          post :vote_for, params: { id: answer }, format: :js
+
+          expect(response).to have_http_status(422)
+          expect(JSON.parse(response.body)['message'].first).to eq('User can vote once!')
+        end
+      end
+    end
+  end
+
+  describe 'POST #vote_against' do
+    let!(:answer) { create(:answer) }
+
+    context 'Non authenticate user' do
+      it 'can not change vote' do
+        expect{ post :vote_against, params: { id: answer } }.to_not change(Vote, :count)
+      end
+
+      it 'redirect to sign_in page' do
+        post :vote_for, params: { id: answer }
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'Authenticate user' do
+      sign_in_user
+
+      context 'can vote against answer' do
+        it 'should decrement vote in db' do
+          expect{ post :vote_against, params: { id: answer } }
+          .to change(answer, :rating).by(-1)
+        end
+
+        it 'response rating in json' do
+          post :vote_against, params: { id: answer }
+
+          expect(response).to have_http_status(:ok)
+          expect(JSON.parse(response.body)["rating"]).to eq -1
+        end
+      end
+
+
+
+      context 'can vote once' do
+        let!(:vote) { create(:vote, votable: answer, user: @user, value: -1) }
+
+        it 'doesnt change vote in db ' do
+          expect{ post :vote_against, params: { id: answer } }.to_not change(answer, :rating)
+        end
+
+        it 'response error json' do
+          post :vote_against, params: { id: answer }
+
+          expect(response).to have_http_status(422)
+          expect(JSON.parse(response.body)['message'].first).to eq "User can vote once!"
+        end
+      end
+
+      context 'Author of answer' do
+        sign_in_user
+        let(:author_answer) { create(:answer, user: @user) }
+
+        it 'can not change vote' do
+          expect{ post :vote_against, params: { id: author_answer } }
+          .to_not change(author_answer.votes, :count)
+        end
+      end
+    end
+  end
+
+  describe 'DELETE #vote_reset' do
+    let(:answer){ create(:answer) }
+
+    context 'Authenticate user' do
+      sign_in_user
+      let!(:vote) { create(:vote, votable: answer, user: @user, value: 1) }
+
+      it 'destroy vote from db' do
+        expect{ delete :vote_reset, params: { id: answer } }
+        .to change(answer.votes, :count).by(-1)
+      end
+
+      it 'response rating in json' do
+        delete :vote_reset, params: { id: answer }
+
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)["rating"]).to eq 0
+      end
+    end
+
+    context 'Non authenticate user' do
+      let(:user) { create(:user) }
+      let!(:vote) { create(:vote, votable: answer, user: user, value: 1) }
+
+      it 'can not change vote' do
+        expect{ delete :vote_against, params: { id: answer } }.to_not change(Vote, :count)
+      end
+
+      it 'redirect to sign_in page' do
+        delete :vote_reset, params: { id: answer }
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context 'Author' do
+      it 'doesnt reset vote' do
+        expect{ delete :vote_reset, params: { id: answer } }.to_not change(answer.votes, :count)
+      end
+    end
+  end
 end
