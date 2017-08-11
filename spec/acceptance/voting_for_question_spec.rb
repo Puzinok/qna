@@ -23,21 +23,21 @@ feature 'User can voting for question', %q{
     end
 
     scenario 'can voting for question', js: true do
-      within '#rating' do
+      within '.rating' do
         find('.glyphicon.glyphicon-plus').trigger('click')
         expect(page).to have_content('1')
       end
     end
 
     scenario 'can voting against question', js: true do
-      within '#rating' do
+      within '.rating' do
         find('.glyphicon.glyphicon-minus').trigger('click')
         expect(page).to have_content('-1')
       end
     end
 
     scenario 'can reset own vote', js: true do
-      within '#rating' do
+      within '.rating' do
         find('.glyphicon.glyphicon-plus').click
         expect(page).to have_content('1')
 
@@ -48,7 +48,7 @@ feature 'User can voting for question', %q{
     end
 
     scenario 'can vote only once', js: true do
-      within '#rating' do
+      within '.rating' do
         find('.glyphicon.glyphicon-plus').click
         wait_for_ajax
         expect(page).to have_content('1')
@@ -67,7 +67,7 @@ feature 'User can voting for question', %q{
     scenario 'doesnt see voting links' do
       visit question_path(author_question)
 
-      expect(page).to_not have_selector('#rating_controls')
+      expect(page).to_not have_selector('.rating_controls')
     end
   end
 
