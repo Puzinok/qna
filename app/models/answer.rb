@@ -1,11 +1,11 @@
 class Answer < ApplicationRecord
+  include Attachable
+
   belongs_to :question
   belongs_to :user
-  has_many :attachments, as: :attachable
+  has_many :votes, as: :votable
 
   validates :body, presence: true
-
-  accepts_nested_attributes_for :attachments, reject_if: proc { |attributes| attributes['file'].nil? }
 
   def toggle_best!
     transaction do
@@ -13,5 +13,13 @@ class Answer < ApplicationRecord
       previous_best_answer&.update_column(:best, false)
       update_column(:best, true)
     end
+  end
+
+  def rating
+    votes.sum(:value)
+  end
+
+  def voted?(user)
+    votes.find_by(user: user)
   end
 end
