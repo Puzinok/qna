@@ -7,6 +7,8 @@ RSpec.describe Answer, type: :model do
   it { should belong_to(:user) }
   it { should have_many(:attachments) }
 
+  it_behaves_like "votable"
+
   describe '#toggle_best!' do
     let(:question) { create(:question) }
     let(:answer) { create(:answer, question: question) }

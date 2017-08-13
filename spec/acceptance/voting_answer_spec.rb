@@ -33,7 +33,6 @@ feature 'User can voting for answer', %q{
     end
 
     scenario 'can voting against answer', js: true do
-
       within '.answer_rating' do
         find('.vote_against_answer').trigger('click')
         expect(page).to have_content('-1')
@@ -64,8 +63,8 @@ feature 'User can voting for answer', %q{
   end
 
   context 'Author' do
-    given(:author){ create(:user) }
-    given(:author_answer){ create(:answer, user: author, question: question) }
+    given(:author) { create(:user) }
+    given(:author_answer) { create(:answer, user: author, question: question) }
 
     scenario 'doesnt see voting links' do
       visit question_path(question)
@@ -75,5 +74,4 @@ feature 'User can voting for answer', %q{
       end
     end
   end
-
 end

@@ -61,8 +61,8 @@ feature 'User can voting for question', %q{
   end
 
   context 'Author' do
-    given(:author){ create(:user) }
-    given(:author_question){ create(:question, user: author) }
+    given(:author) { create(:user) }
+    given(:author_question) { create(:question, user: author) }
 
     scenario 'doesnt see voting links' do
       visit question_path(author_question)
@@ -70,6 +70,4 @@ feature 'User can voting for question', %q{
       expect(page).to_not have_selector('.rating_controls')
     end
   end
-
-
 end
