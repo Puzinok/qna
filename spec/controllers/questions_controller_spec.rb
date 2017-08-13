@@ -215,7 +215,7 @@ RSpec.describe  QuestionsController, type: :controller do
 
     context 'Non authenticate user' do
       it 'can not change vote' do
-        expect{ post :vote_for, params: { id: question } }.to_not change(Vote, :count)
+        expect { post :vote_for, params: { id: question } }.to_not change(Vote, :count)
       end
 
       it 'redirect to sign_in page' do
@@ -229,8 +229,8 @@ RSpec.describe  QuestionsController, type: :controller do
       let(:author_question) { create(:question, user: @user) }
 
       it 'can not change vote' do
-        expect{ post :vote_for, params: { id: author_question } }
-        .to_not change(author_question.votes, :count)
+        expect { post :vote_for, params: { id: author_question } }
+          .to_not change(author_question.votes, :count)
       end
     end
 
@@ -239,7 +239,7 @@ RSpec.describe  QuestionsController, type: :controller do
 
       context 'can vote for question' do
         it 'should increment vote in db' do
-          expect{ post :vote_for, params: { id: question } }.to change(question, :rating).by(1)
+          expect { post :vote_for, params: { id: question } }.to change(question, :rating).by(1)
         end
 
         it 'response rating in json' do
@@ -254,81 +254,80 @@ RSpec.describe  QuestionsController, type: :controller do
         let!(:vote) { create(:vote, votable: question, user: @user, value: 1) }
 
         it 'doesnt change vote in db ' do
-          expect{ post :vote_for, params: { id: question }}.to_not change(question, :rating)
+          expect { post :vote_for, params: { id: question } }.to_not change(question, :rating)
 
           expect(response).to have_http_status(422)
-
-          expect(JSON.parse(response.body)[0]).to eq 'User can vote once!'
+          pp JSON.parse(response.body)
+          expect(JSON.parse(response.body)['message'].first).to eq 'User can vote once!'
         end
       end
     end
 
-  describe 'POST #vote_against' do
-    let!(:question) { create(:question) }
+    describe 'POST #vote_against' do
+      let!(:question) { create(:question) }
 
-    context 'Non authenticate user' do
-      it 'can not change vote' do
-        expect{ post :vote_against, params: { id: question } }.to_not change(Vote, :count)
-      end
-
-      it 'redirect to sign_in page' do
-        post :vote_for, params: { id: question }
-        expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    context 'Authenticate user' do
-      sign_in_user
-
-      context 'can vote against question' do
-        it 'should decrement vote in db' do
-          expect{ post :vote_against, params: { id: question } }
-          .to change(question, :rating).by(-1)
+      context 'Non authenticate user' do
+        it 'can not change vote' do
+          expect { post :vote_against, params: { id: question } }.to_not change(Vote, :count)
         end
 
-        it 'response rating in json' do
-          post :vote_against, params: { id: question }
-
-          expect(response).to have_http_status(:ok)
-          expect(JSON.parse(response.body)["rating"]).to eq -1
+        it 'redirect to sign_in page' do
+          post :vote_for, params: { id: question }
+          expect(response).to redirect_to new_user_session_path
         end
       end
 
+      context 'Authenticate user' do
+        sign_in_user
 
-      context 'can vote once' do
-        let!(:vote) { create(:vote, votable: question, user: @user, value: -1) }
+        context 'can vote against question' do
+          it 'should decrement vote in db' do
+            expect { post :vote_against, params: { id: question } }
+              .to change(question, :rating).by(-1)
+          end
 
-        it 'doesnt change vote in db ' do
-          expect{ post :vote_against, params: { id: question } }.to_not change(question, :rating)
+          it 'response rating in json' do
+            post :vote_against, params: { id: question }
 
-          expect(response).to have_http_status(422)
-          expect(JSON.parse(response.body)[0]).to eq "User can vote once!"
+            expect(response).to have_http_status(:ok)
+            expect(JSON.parse(response.body)['rating']).to eq(-1)
+          end
+        end
+
+        context 'can vote once' do
+          let!(:vote) { create(:vote, votable: question, user: @user, value: -1) }
+
+          it 'doesnt change vote in db ' do
+            expect { post :vote_against, params: { id: question } }.to_not change(question, :rating)
+
+            expect(response).to have_http_status(422)
+            expect(JSON.parse(response.body)['message'].first).to eq "User can vote once!"
+          end
         end
       end
-    end
 
       context 'Author of question' do
         sign_in_user
         let(:author_question) { create(:question, user: @user) }
 
         it 'can not change vote' do
-          expect{ post :vote_against, params: { id: author_question } }
-          .to_not change(author_question.votes, :count)
+          expect { post :vote_against, params: { id: author_question } }
+            .to_not change(author_question.votes, :count)
         end
       end
     end
   end
 
   describe 'DELETE #vote_reset' do
-    let(:question){ create(:question) }
+    let(:question) { create(:question) }
 
     context 'Authenticate user' do
       sign_in_user
       let!(:vote) { create(:vote, votable: question, user: @user, value: 1) }
 
       it 'destroy vote from db' do
-        expect{ delete :vote_reset, params: { id: question } }
-        .to change(question.votes, :count).by(-1)
+        expect { delete :vote_reset, params: { id: question } }
+          .to change(question.votes, :count).by(-1)
       end
 
       it 'response rating in json' do
@@ -344,7 +343,7 @@ RSpec.describe  QuestionsController, type: :controller do
       let!(:vote) { create(:vote, votable: question, user: user, value: 1) }
 
       it 'can not change vote' do
-        expect{ delete :vote_against, params: { id: question } }.to_not change(Vote, :count)
+        expect { delete :vote_against, params: { id: question } }.to_not change(Vote, :count)
       end
 
       it 'redirect to sign_in page' do
@@ -355,7 +354,7 @@ RSpec.describe  QuestionsController, type: :controller do
 
     context 'Author' do
       it 'doesnt reset vote' do
-        expect{ delete :vote_reset, params: { id: question} }.to_not change(question.votes, :count)
+        expect { delete :vote_reset, params: { id: question } }.to_not change(question.votes, :count)
       end
     end
   end

@@ -1,9 +1,9 @@
 class Answer < ApplicationRecord
   include Attachable
+  include Votable
 
   belongs_to :question
   belongs_to :user
-  has_many :votes, as: :votable
 
   validates :body, presence: true
 
@@ -13,13 +13,5 @@ class Answer < ApplicationRecord
       previous_best_answer&.update_column(:best, false)
       update_column(:best, true)
     end
-  end
-
-  def rating
-    votes.sum(:value)
-  end
-
-  def voted?(user)
-    votes.find_by(user: user)
   end
 end
