@@ -15,8 +15,7 @@ ready = ->
 
   .bind 'ajax:error', (e, xhr, status, error) ->
     errors = $.parseJSON(xhr.responseText)
-    $.each errors, (index, value) ->
-      $('#question .rating_msg').text(value)
+    $('#question .rating_msg').text(errors.message)
 
 
 

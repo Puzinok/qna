@@ -278,7 +278,7 @@ RSpec.describe AnswersController, type: :controller do
           post :vote_for, params: { id: answer }, format: :js
 
           expect(response).to have_http_status(422)
-          expect(JSON.parse(response.body)['message'].first).to eq('User can vote once!')
+          expect(JSON.parse(response.body)['message']).to eq('User can vote once!')
         end
       end
     end
@@ -326,7 +326,7 @@ RSpec.describe AnswersController, type: :controller do
           post :vote_against, params: { id: answer }
 
           expect(response).to have_http_status(422)
-          expect(JSON.parse(response.body)['message'].first).to eq "User can vote once!"
+          expect(JSON.parse(response.body)['message']).to eq "User can vote once!"
         end
       end
 

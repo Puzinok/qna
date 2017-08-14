@@ -26,4 +26,31 @@ RSpec.shared_examples "votable" do
       expect(votable).not_to be_voted(users[1])
     end
   end
+
+  describe '#voting' do
+    let(:votable) { create(described_class.to_s.underscore.to_sym) }
+    let(:user) { create(:user) }
+
+    it 'User voting for question' do
+      expect { votable.voting(user, 1) }.to change(votable, :rating).by(1)
+    end
+
+    it 'User voting against' do
+      expect { votable.voting(user, -1) }.to change(votable, :rating).by(-1)
+    end
+  end
+
+  describe '#vote_destroy' do
+    let(:users) { create_list(:user, 2) }
+    let(:votable) { create(described_class.to_s.underscore.to_sym) }
+    let!(:vote) { create(:vote, votable: votable, user: users[0], value: 1) }
+
+    it "User destroy own vote" do
+      expect { votable.vote_destroy(users[0]) }.to change(votable.votes, :count).by(-1)
+    end
+
+    it "User can't destroy other's vote" do
+      expect { votable.vote_destroy(users[1]) }.to_not change(votable.votes, :count)
+    end
+  end
 end

@@ -258,7 +258,7 @@ RSpec.describe  QuestionsController, type: :controller do
 
           expect(response).to have_http_status(422)
           pp JSON.parse(response.body)
-          expect(JSON.parse(response.body)['message'].first).to eq 'User can vote once!'
+          expect(JSON.parse(response.body)['message']).to eq 'User can vote once!'
         end
       end
     end
@@ -301,7 +301,7 @@ RSpec.describe  QuestionsController, type: :controller do
             expect { post :vote_against, params: { id: question } }.to_not change(question, :rating)
 
             expect(response).to have_http_status(422)
-            expect(JSON.parse(response.body)['message'].first).to eq "User can vote once!"
+            expect(JSON.parse(response.body)['message']).to eq "User can vote once!"
           end
         end
       end

@@ -12,4 +12,16 @@ module Votable
   def voted?(user)
     votes.find_by(user: user)
   end
+
+  def voting(user, value)
+    return if user.author_of?(self)
+    return if voted?(user)
+    vote = votes.build(user: user, value: value)
+    vote.save
+  end
+
+  def vote_destroy(user)
+    vote = voted?(user)
+    vote.destroy if vote
+  end
 end
