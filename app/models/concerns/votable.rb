@@ -13,7 +13,7 @@ module Votable
     votes.find_by(user: user)
   end
 
-  def voting(user, value)
+  def vote(user, value)
     return if user.author_of?(self)
     return if voted?(user)
     vote = votes.build(user: user, value: value)

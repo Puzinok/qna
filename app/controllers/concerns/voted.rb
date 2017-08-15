@@ -24,7 +24,7 @@ module Voted
   private
 
   def vote(value)
-    if @votable.voting(current_user, value)
+    if @votable.vote(current_user, value)
       render_rating(@votable)
     else
       render_msg(@votable, 'User can vote once!', 422)

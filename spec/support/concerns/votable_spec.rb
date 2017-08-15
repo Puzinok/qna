@@ -27,16 +27,16 @@ RSpec.shared_examples "votable" do
     end
   end
 
-  describe '#voting' do
+  describe '#vote' do
     let(:votable) { create(described_class.to_s.underscore.to_sym) }
     let(:user) { create(:user) }
 
     it 'User voting for question' do
-      expect { votable.voting(user, 1) }.to change(votable, :rating).by(1)
+      expect { votable.vote(user, 1) }.to change(votable, :rating).by(1)
     end
 
     it 'User voting against' do
-      expect { votable.voting(user, -1) }.to change(votable, :rating).by(-1)
+      expect { votable.vote(user, -1) }.to change(votable, :rating).by(-1)
     end
   end
 
