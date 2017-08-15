@@ -1,5 +1,8 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :destroy, :update, :choose_best]
+  include Voted
+
+  before_action :authenticate_user!
+  before_action :set_answer, only: [:destroy, :update]
 
   def create
     @question = Question.find(params[:question_id])
@@ -9,12 +12,10 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    @answer = Answer.find(params[:id])
     @answer.destroy if current_user&.author_of?(@answer)
   end
 
   def update
-    @answer = Answer.find(params[:id])
     @answer.update(answer_params) if current_user.author_of?(@answer)
     @question = @answer.question
   end
@@ -28,6 +29,10 @@ class AnswersController < ApplicationController
   end
 
   private
+
+  def set_answer
+    @answer = Answer.find(params[:id])
+  end
 
   def answer_params
     params.require(:answer).permit(:body, attachments_attributes: [:file])

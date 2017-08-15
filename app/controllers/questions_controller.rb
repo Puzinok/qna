@@ -1,5 +1,8 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :destroy, :update]
+  include Voted
+
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :set_question, except: [:index, :new, :create]
 
   def index
     @questions = Question.all
@@ -20,13 +23,11 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @question = Question.find(params[:id])
     @answer = Answer.new
     @answer.attachments.build
   end
 
   def destroy
-    @question = Question.find(params[:id])
     if current_user&.author_of?(@question)
       @question.destroy
       redirect_to questions_path, notice: 'Your question succefully deleted.'
@@ -36,11 +37,14 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question = Question.find(params[:id])
     @question.update(question_params) if current_user.author_of?(@question)
   end
 
   private
+
+  def set_question
+    @question = Question.find(params[:id])
+  end
 
   def question_params
     params.require(:question).permit(:title, :body, attachments_attributes: [:file])

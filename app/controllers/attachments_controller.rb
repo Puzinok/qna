@@ -3,9 +3,12 @@ class AttachmentsController < ApplicationController
 
   def destroy
     @attachment = Attachment.find(params[:id])
-    return head(:forbidden) unless current_user.author_of?(@attachment.attachable)
-    @attachment.destroy
-    render :destroy
+    if current_user.author_of?(@attachment.attachable)
+      @attachment.destroy
+      render :destroy
+    else
+      head(:forbidden)
+    end
   end
 
   def attachment_params

@@ -25,13 +25,13 @@ feature 'Question editing', %q{
     end
 
     scenario 'can see edit link for question' do
-      within '.question' do
+      within '#question' do
         expect(page).to have_link('Edit')
       end
     end
 
     scenario 'try to edit his question', js: true do
-      within '.question' do
+      within '#question' do
         click_on 'Edit'
         fill_in 'Title', with: 'edited title'
         fill_in 'Body', with: 'edited body'
@@ -45,7 +45,7 @@ feature 'Question editing', %q{
     end
 
     scenario 'try to save invalid question', js: true do
-      within '.question' do
+      within '#question' do
         click_on 'Edit'
         fill_in 'Title', with: ''
         fill_in 'Body', with: ''
@@ -61,7 +61,7 @@ feature 'Question editing', %q{
     sign_in(another_user)
     visit question_path(question)
 
-    within '.question' do
+    within '#question' do
       expect(page).to_not have_link('Edit')
     end
   end

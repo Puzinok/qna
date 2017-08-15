@@ -8,6 +8,17 @@ ready = ->
     $(this).hide();
     $('form#edit-question').show();
 
+  $('.vote_for_question, .vote_against_question, .vote_reset_question').bind 'ajax:success', (e, data, status, xhr) ->
+    rating_data = $.parseJSON(xhr.responseText)
+    $('#question .rating_sum').text(rating_data.rating)
+    $('#question .rating_msg').text(rating_data.message)
+
+  .bind 'ajax:error', (e, xhr, status, error) ->
+    errors = $.parseJSON(xhr.responseText)
+    $('#question .rating_msg').text(errors.message)
+
+
+
 $(document).ready(ready)
 $(document).on('page:load', ready)
 $(document).on('page:update', ready)

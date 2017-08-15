@@ -40,6 +40,7 @@ feature 'Choose the best answer', %q{
 
       within '.answers' do
         click_link('Best', match: :first)
+        wait_for_ajax
         expect(page).to have_content('Best answer')
       end
     end
@@ -61,7 +62,7 @@ feature 'Choose the best answer', %q{
       visit question_path(author_question)
 
       within '.answers' do
-        first_answer = find(:css, 'div:first-child')
+        first_answer = all('div').first
         expect(first_answer).to have_content('Best answer')
 
         click_link('Best', match: :first)

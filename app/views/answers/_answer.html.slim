@@ -10,6 +10,19 @@ div.well.well-sm id="answer_body_#{answer.id}"
     - if current_user&.author_of?(@question) && !answer.best
       = link_to 'Best', answer_choose_best_path(answer), method: :patch, remote: true
 
+    .answer_rating
+      .rating_msg
+      p Rating:
+      .btn-group
+        span.btn-sm.btn-primary.rating_sum = answer.rating
+        - if user_signed_in? && !current_user&.author_of?(answer)
+          span.rating_controls
+            = link_to glyph(:minus), vote_against_answer_path(answer),
+            remote: true, method: :post, class: 'btn-sm btn-danger vote_against_answer'
+            = link_to glyph(:plus), vote_for_answer_path(answer),
+            remote: true, method: :post, class: 'btn-sm btn-success vote_for_answer'
+            = link_to glyph(:repeat), vote_reset_answer_path(answer),
+            remote: true, method: :delete, class: 'btn-sm btn-primary vote_reset_answer'
 
     - if current_user&.author_of?(answer)
       = form_for answer, html: { id: "edit-answer-#{answer.id}" }, remote: true do |f|
