@@ -22,7 +22,8 @@ ready = ->
       @perform 'follow'
     ,
     received: (data) ->
-      $('#questions_list .list-group').append(data)
+      console.log data
+      $('#questions_list .list-group').append(JST["templates/question_item"](data))
   })
 
 $(document).ready(ready)
