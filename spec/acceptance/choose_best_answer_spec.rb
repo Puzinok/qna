@@ -66,6 +66,8 @@ feature 'Choose the best answer', %q{
         expect(first_answer).to have_content('Best answer')
 
         click_link('Best', match: :first)
+        wait_for_ajax
+        first_answer = all('div').first
         expect(first_answer).to have_content('Best answer')
       end
     end

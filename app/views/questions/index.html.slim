@@ -1,6 +1,5 @@
-- @questions.each do |question|
-  .question_title
-    = link_to "#{question.title}", question_path(question)
-  .question_body
-    = question.body
-  hr
+h3 Questions:
+#questions_list
+  ul.list-group
+    - @questions.each do |question|
+      = render 'question_item', question: question

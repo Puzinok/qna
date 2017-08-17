@@ -17,8 +17,14 @@ ready = ->
     errors = $.parseJSON(xhr.responseText)
     $('#question .rating_msg').text(errors.message)
 
-
+  App.cable.subscriptions.create('QuestionsChannel', {
+    connected: ->
+      @perform 'follow'
+    ,
+    received: (data) ->
+      $('#questions_list .list-group').append(data)
+  })
 
 $(document).ready(ready)
-$(document).on('page:load', ready)
-$(document).on('page:update', ready)
+$(document).on('turbolinks', ready)
+#$(document).on('page:update', ready)
