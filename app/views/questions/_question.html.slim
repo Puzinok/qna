@@ -1,7 +1,8 @@
-#question
+#question data-question-id = "#{question.id}"
   .panel.panel-info
     .panel-heading
       h3.panel-title = question.title
+      i author: #{question.user.email}
     .panel-body
       = question.body
       #attachments

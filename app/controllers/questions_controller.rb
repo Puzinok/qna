@@ -27,6 +27,7 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new
     @answer.attachments.build
+    gon.question_user_id = @question.user.id
   end
 
   def destroy
@@ -47,7 +48,7 @@ class QuestionsController < ApplicationController
   def publish_question
     return if @question.errors.any?
     ActionCable.server.broadcast('questions',
-    { id: @question.id, title: @question.title} )
+    { id: @question.id, title: @question.title } )
   end
 
   def set_question
