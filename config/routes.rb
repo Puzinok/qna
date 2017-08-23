@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       concerns :votable
       patch :choose_best
     end
+    resources :comments, only: [:create]
   end
 
   resources :attachments, only: [:destroy]

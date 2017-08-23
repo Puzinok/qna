@@ -1,4 +1,14 @@
 = render @question
+
+#question_comments
+  - @question.comments.each do |comment|
+    p.bg-info = comment.body
+
+  = form_for [@question, @comment] do |f|
+    = f.label :body, 'New comment'
+    = f.text_area :body, class: 'form-control'
+    = f.submit
+
 hr
 .answers
   = render @question.answers

@@ -27,6 +27,7 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new
     @answer.attachments.build
+    @comment = Comment.new
     gon.question_user_id = @question.user.id
   end
 
