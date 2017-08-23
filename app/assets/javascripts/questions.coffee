@@ -26,6 +26,5 @@ ready = ->
       $('#questions_list .list-group').append(JST["templates/question_item"](data))
   })
 
-$(document).ready(ready)
-$(document).on('turbolinks', ready)
-#$(document).on('page:update', ready)
+$(document).ready(ready);
+$(document).on("turbolinks:load", ready);
