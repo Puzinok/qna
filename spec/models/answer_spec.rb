@@ -24,4 +24,14 @@ RSpec.describe Answer, type: :model do
       expect(another_answer.best).to eq false
     end
   end
+
+  describe '#get_attachments' do
+    let(:answer) { create(:answer) }
+    let!(:attachment) { create(:attachment, attachable: answer) }
+
+    it 'Get attachments filename and url to hash' do
+      puts answer.get_attachments
+      expect(answer.get_attachments[0]).to include(filename: attachment.file.identifier, url: attachment.file.url)
+    end
+  end
 end
