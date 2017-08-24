@@ -26,7 +26,7 @@ ready = ->
   App.cable.subscriptions.create('AnswersChannel', {
     connected: ->
       question_id = $('#question').data('questionId')
-      console.log('Connected to question id:' + question_id)
+      console.log('AnswerChannel to question id:' + question_id)
       @perform 'follow', question_id: question_id
     ,
     received: (data) ->
@@ -35,4 +35,4 @@ ready = ->
         $('.answers').append(JST["templates/answer"](data))
   })
 
-$(document).on("turbolinks:load", ready);
+$(document).on("ready", ready);

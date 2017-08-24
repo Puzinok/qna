@@ -1,13 +1,15 @@
-= render @question
+#question data-question-id = "#{@question.id}"
+  = render @question
 
-#question_comments
-  - @question.comments.each do |comment|
-    p.bg-info = comment.body
+  #question_comments
+    - @question.comments.each do |comment|
+      p.bg-info = comment.body
 
-  = form_for [@question, @comment] do |f|
-    = f.label :body, 'New comment'
-    = f.text_area :body, class: 'form-control'
-    = f.submit
+  - if user_signed_in?
+      = form_for [@question, @comment], remote: true do |f|
+        = f.label :body, 'New comment'
+        = f.text_area :body, class: 'form-control'
+        = f.submit
 
 hr
 .answers
