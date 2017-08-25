@@ -13,7 +13,7 @@ feature 'Browse all questions', %q{
     visit questions_path
     questions.each do |question|
       expect(page).to have_content(question.title)
-      end
+    end
   end
 
   scenario 'Authenticated user browse all questions' do

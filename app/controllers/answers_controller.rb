@@ -6,7 +6,6 @@ class AnswersController < ApplicationController
 
   after_action :publish_answer, only: [:create]
 
-
   def create
     @question = Question.find(params[:question_id])
     @answer = @question.answers.build(answer_params)
@@ -37,8 +36,8 @@ class AnswersController < ApplicationController
     @question = Question.find(params[:question_id])
     ActionCable.server.broadcast(
       "answers_question_id_#{@question.id}",
-      { answer: @answer, attachments: @answer.get_attachments }
-      )
+      answer: @answer, attachments: @answer.get_attachments
+    )
   end
 
   def set_answer

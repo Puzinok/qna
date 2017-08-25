@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-ready = ->
+$(document).on 'ready', ->
   $('.edit-question-link').click (e) ->
     e.preventDefault();
     $(this).hide();
@@ -25,6 +25,3 @@ ready = ->
       console.log data
       $('#questions_list .list-group').append(JST["templates/question_item"](data))
   })
-
-$(document).ready(ready);
-$(document).on("turbolinks:load", ready);

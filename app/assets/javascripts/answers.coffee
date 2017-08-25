@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-ready = ->
+$(document).on 'ready', ->
   $('body').on 'click', '.edit-answer-link', (e) ->
     e.preventDefault();
     $(this).hide();
@@ -34,5 +34,3 @@ ready = ->
       if gon.user_id != data.answer.user_id
         $('.answers').append(JST["templates/answer"](data))
   })
-
-$(document).on("ready", ready);

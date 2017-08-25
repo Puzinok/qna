@@ -92,7 +92,6 @@ feature 'User can voting for answer', %q{
           visit question_path(question)
         end
 
-
         Capybara.using_session('user') do
           within '#new_answer' do
             fill_in 'Answer', with: answer.body
@@ -147,7 +146,6 @@ feature 'User can voting for answer', %q{
     end
 
     context 'Non authenticate user' do
-
       scenario "doest't see votes button", js: true do
         Capybara.using_session('guest') do
           visit question_path(question)

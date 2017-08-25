@@ -1,4 +1,3 @@
-
 $(document).on 'ready', ->
  App.cable.subscriptions.create('CommentsChannel', {
     connected: ->

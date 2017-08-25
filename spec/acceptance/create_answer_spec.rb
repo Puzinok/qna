@@ -32,10 +32,10 @@ feature 'Create answer the question', %q{
   end
 
   scenario "Non authenticated user cannot answer the question" do
-      visit question_path(question)
-      fill_in 'Answer', with: answer.body
-      click_on 'Create'
-      expect(page).to have_content('You need to sign in or sign up before continuing.')
+    visit question_path(question)
+    fill_in 'Answer', with: answer.body
+    click_on 'Create'
+    expect(page).to have_content('You need to sign in or sign up before continuing.')
   end
 
   context 'multiple sessions' do
