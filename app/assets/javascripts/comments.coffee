@@ -1,14 +1,15 @@
 
-renderComment = ->
+$(document).on 'ready', ->
  App.cable.subscriptions.create('CommentsChannel', {
     connected: ->
-      question_id = $('#question').data('questionId')
-      console.log('Comments connected to question ' + question_id)
-      @perform 'follow', question_id: question_id
+      questionId = $('#question').data('questionId')
+      console.log('Comments connected to question ' + questionId)
+      @perform 'follow', question_id: questionId
     ,
     received: (data) ->
-      console.log(data)
-      $('#question_comments').append(JST["templates/comment"](data))
+      if data.comment.commentable_type == 'Question'
+        $('#question_comments').append(JST["templates/comment"](data))
+      else
+        answerDiv = $('#answer_body_' + data.comment.commentable_id + ' #answer_comments')
+        (answerDiv).append(JST["templates/comment"](data))
   })
-
-$(document).on("ready", renderComment)

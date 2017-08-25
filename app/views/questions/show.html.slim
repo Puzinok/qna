@@ -5,11 +5,7 @@
     - @question.comments.each do |comment|
       p.bg-info = comment.body
 
-  - if user_signed_in?
-      = form_for [@question, @comment], remote: true do |f|
-        = f.label :body, 'New comment'
-        = f.text_area :body, class: 'form-control'
-        = f.submit
+  = render partial: "comments/form", locals: {commentable: @question}
 
 hr
 .answers

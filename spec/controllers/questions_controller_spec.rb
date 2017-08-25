@@ -94,10 +94,6 @@ RSpec.describe  QuestionsController, type: :controller do
     it 'renders show view' do
       expect(response).to render_template :show
     end
-
-    it 'assigns new comment to @comment' do
-      expect(assigns(:comment)).to be_a_new(Comment)
-    end
   end
 
   describe 'DELETE #destroy' do

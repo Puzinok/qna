@@ -1,10 +1,10 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_commentable
   after_action :publish_comment
 
   def create
-    @question = Question.find(params[:question_id])
-    @comment = @question.comments.build(comment_params)
+    @comment = @commentable.comments.build(comment_params)
     @comment.user = current_user
     @comment.save
   end
@@ -12,12 +12,25 @@ class CommentsController < ApplicationController
   private
 
   def publish_comment
-    return unless current_user
-    @question = Question.find(params[:question_id])
-    ActionCable.server.broadcast("comments_question_id_#{@question.id}", { comment: @comment } )
+    commentable_id = if @commentable.is_a? Question
+                       @commentable.id
+                     else
+                       @commentable.question.id
+                     end
+
+    return if @comment.errors.any?
+    ActionCable.server.broadcast("comments_commentable_id_#{commentable_id}", comment: @comment)
   end
 
   def comment_params
     params.require(:comment).permit(:body)
+  end
+
+  def set_commentable
+    params.each do |name, value|
+      if name =~ /(.+)_id$/
+        @commentable = Regexp.last_match(1).classify.constantize.find(value)
+      end
+    end
   end
 end
