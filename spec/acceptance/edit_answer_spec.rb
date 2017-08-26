@@ -34,12 +34,14 @@ feature 'Answer editing', %q{
     scenario 'try to edit his answer', js: true do
       within '.answers' do
         click_on 'Edit'
-        fill_in 'Answer', with: 'edited body'
-        click_on 'Save'
+        within '.edit_answer' do
+          fill_in 'Answer', with: 'edited body'
+          click_on 'Save'
+        end
 
         expect(page).to_not have_content(author_answer.body)
         expect(page).to have_content('edited body')
-        expect(page).to_not have_selector('textarea')
+        expect(page).to_not have_selector('.edit_answer')
       end
     end
 

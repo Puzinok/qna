@@ -1,4 +1,12 @@
-= render @question
+#question data-question-id = "#{@question.id}"
+  = render @question
+
+  #question_comments
+    - @question.comments.each do |comment|
+      p.bg-info = comment.body
+
+  = render partial: "comments/form", locals: {commentable: @question}
+
 hr
 .answers
   = render @question.answers

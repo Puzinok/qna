@@ -41,4 +41,27 @@ feature 'Author can attach files to answer', %q{
       expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/2/rails_helper.rb'
     end
   end
+
+  context 'multiple session' do
+    scenario "answer with attachment appears to user's page", js: true do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        fill_in 'Answer', with: answer.body
+        attach_file 'File', Rails.root.join('spec', 'spec_helper.rb')
+        click_on 'Create'
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
+      end
+    end
+  end
 end

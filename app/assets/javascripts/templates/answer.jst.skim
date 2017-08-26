@@ -1,0 +1,29 @@
+div.well.well-sm id="answer_body_#{@answer.id}"
+  - if @answer.best
+    p.text-success id='marked_best' Best answer
+
+  =@answer.body
+
+  p Attachments:
+  ul
+    - for attachment in @attachments
+      li
+        a href="#{attachment.url}"
+          = attachment.filename
+
+  - if gon.user_id == gon.question_user_id && !@answer.best
+    a data-remote="true" rel="nofollow" data-method="post" href="/answers/#{@answer.id}/choose_best" Best
+
+  .answer_rating
+    .rating_msg
+    p Rating:
+    .btn-group
+      span.btn-sm.btn-primary.rating_sum 0
+      - if gon.user_id && gon.user_id != @user_id
+        span.rating_controls
+          a.btn-sm.btn-danger.vote_against_answer data-remote="true" rel="nofollow" data-method="post" href="/answers/#{@answer.id}/vote_against"
+            i.glyphicon.glyphicon-minus
+          a.btn-sm.btn-success.vote_for_answer data-remote="true" rel="nofollow" data-method="post" href="/answers/#{@answer.id}/vote_for"
+            i.glyphicon.glyphicon-plus
+          a.btn-sm.btn-primary.vote_reset data-remote="true" rel="nofollow" data-method="post" href="/answers/#{@answer.id}/vote_reset"
+            i.glyphicon.glyphicon-repeat

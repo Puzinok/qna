@@ -55,3 +55,6 @@ bower.json
 
 #uploader
 /public/uploads/*
+
+#rubymine idea
+/.idea/*

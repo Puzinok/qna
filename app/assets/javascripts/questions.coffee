@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-ready = ->
+$(document).on 'ready', ->
   $('.edit-question-link').click (e) ->
     e.preventDefault();
     $(this).hide();
@@ -17,8 +17,11 @@ ready = ->
     errors = $.parseJSON(xhr.responseText)
     $('#question .rating_msg').text(errors.message)
 
-
-
-$(document).ready(ready)
-$(document).on('page:load', ready)
-$(document).on('page:update', ready)
+  App.cable.subscriptions.create('QuestionsChannel', {
+    connected: ->
+      @perform 'follow'
+    ,
+    received: (data) ->
+      console.log data
+      $('#questions_list .list-group').append(JST["templates/question_item"](data))
+  })
