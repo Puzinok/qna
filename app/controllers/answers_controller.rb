@@ -3,37 +3,33 @@ class AnswersController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_answer, only: [:destroy, :update]
-
+  before_action :set_question, only: [:create, :publish_answer]
   after_action :publish_answer, only: [:create]
 
+  respond_to :js
+
   def create
-    @question = Question.find(params[:question_id])
-    @answer = @question.answers.build(answer_params)
-    @answer.user = current_user
-    @answer.save
+    respond_with(@answer = @question.answers.create(answer_params.merge(user_id: current_user.id)))
   end
 
   def destroy
-    @answer.destroy if current_user&.author_of?(@answer)
+    respond_with(@answer.destroy) if current_user&.author_of?(@answer)
   end
 
   def update
-    @answer.update(answer_params) if current_user.author_of?(@answer)
-    @question = @answer.question
+    respond_with(@answer.update(answer_params)) if current_user.author_of?(@answer)
   end
 
   def choose_best
     @answer = Answer.find(params[:answer_id])
-    @question = @answer.question
-    @answers = @question.answers
+    @answers = @answer.question.answers
 
-    @answer.toggle_best! if current_user&.author_of?(@question)
+    @answer.toggle_best! if current_user&.author_of?(@answer.question)
   end
 
   private
 
   def publish_answer
-    @question = Question.find(params[:question_id])
     ActionCable.server.broadcast(
       "answers_question_id_#{@question.id}",
       answer: @answer, attachments: @answer.get_attachments
@@ -42,6 +38,10 @@ class AnswersController < ApplicationController
 
   def set_answer
     @answer = Answer.find(params[:id])
+  end
+
+  def set_question
+    @question = Question.find(params[:question_id])
   end
 
   def answer_params
