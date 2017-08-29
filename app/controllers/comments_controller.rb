@@ -3,10 +3,10 @@ class CommentsController < ApplicationController
   before_action :set_commentable
   after_action :publish_comment
 
+  respond_to :json
+
   def create
-    @comment = @commentable.comments.build(comment_params)
-    @comment.user = current_user
-    @comment.save
+    respond_with(@comment = @commentable.comments.create(comment_params.merge(user_id: current_user.id)))
   end
 
   private

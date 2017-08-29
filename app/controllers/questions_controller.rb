@@ -7,6 +7,8 @@ class QuestionsController < ApplicationController
 
   after_action :publish_question, only: [:create]
 
+  respond_to :html, :json
+
   def index
     respond_with(@questions = Question.all)
   end
