@@ -12,7 +12,7 @@ RSpec.describe CommentsController, type: :controller do
           post :create, params: {
             comment: attributes_for(:comment),
             question_id: question
-          }, format: :js
+          }, format: :json
         }.to change(question.comments, :count).by(1)
       end
     end
@@ -23,7 +23,7 @@ RSpec.describe CommentsController, type: :controller do
           post :create, params: {
             comment: attributes_for(:comment),
             question_id: question
-          }, format: :js
+          }, format: :json
         }.to_not change(Comment, :count)
       end
     end

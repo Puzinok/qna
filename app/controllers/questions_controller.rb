@@ -3,40 +3,31 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_question, except: [:index, :new, :create]
+  before_action :build_answer, only: [:show]
 
   after_action :publish_question, only: [:create]
 
+  respond_to :html, :json
+
   def index
-    @questions = Question.all
+    respond_with(@questions = Question.all)
   end
 
   def new
-    @question = Question.new
-    @question.attachments.build
+    respond_with(@question = Question.new)
   end
 
   def create
-    @question = current_user.questions.new(question_params)
-    if @question.save
-      redirect_to @question, notice: 'Your question succefully created.'
-    else
-      render :new
-    end
+    respond_with(@question = current_user.questions.create(question_params))
   end
 
   def show
-    @answer = Answer.new
-    @answer.attachments.build
     gon.question_user_id = @question.user.id
+    respond_with(@question)
   end
 
   def destroy
-    if current_user&.author_of?(@question)
-      @question.destroy
-      redirect_to questions_path, notice: 'Your question succefully deleted.'
-    else
-      redirect_to questions_path, notice: 'Your question not deleted.'
-    end
+    respond_with(@question.destroy) if current_user&.author_of?(@question)
   end
 
   def update
@@ -53,6 +44,10 @@ class QuestionsController < ApplicationController
 
   def set_question
     @question = Question.find(params[:id])
+  end
+
+  def build_answer
+    @answer = Answer.new
   end
 
   def question_params

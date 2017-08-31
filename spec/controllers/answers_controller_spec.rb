@@ -143,11 +143,6 @@ RSpec.describe AnswersController, type: :controller do
         expect(assigns(:answer)).to eq answer
       end
 
-      it 'assings antwer to question' do
-        patch :update, params: { id: answer, question_id: question, answer: attributes_for(:answer) }, format: :js
-        expect(assigns(:question)).to eq question
-      end
-
       context 'with valid attributes' do
         it 'change answer attributes' do
           patch :update, params: { id: answer, question_id: question, answer: { body: 'edited body' } }, format: :js
