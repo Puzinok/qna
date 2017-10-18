@@ -31,4 +31,8 @@ RSpec.configure do |config|
   config.before(:suite) do
     FileUtils.rm_rf(Rails.root.join('public', 'uploads')) if Rails.env.test?
   end
+
+  config.include(OmniauthMacros)
 end
+
+OmniAuth.config.test_mode = true
