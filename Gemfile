@@ -44,6 +44,9 @@ gem 'skim'
 gem 'gon'
 gem 'responders', '~> 2.0'
 
+gem 'omniauth'
+gem 'omniauth-facebook'
+
 group :test do
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'
   gem 'launchy'
