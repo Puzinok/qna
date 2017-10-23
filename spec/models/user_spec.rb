@@ -87,6 +87,47 @@ RSpec.describe User, type: :model do
           expect(authorization.uid).to eq auth.uid
         end
       end
+
+      context 'User does not exist, email is not present' do
+        let(:auth) { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123456', info: { email: nil }) }
+
+        it 'creates new user' do
+          expect { User.find_for_oauth(auth) }.to change(User, :count).by(1)
+        end
+
+        it 'returns new user' do
+          expect(User.find_for_oauth(auth)).to be_a(User)
+        end
+
+        it 'fills email with temporary email' do
+          user = User.find_for_oauth(auth)
+          expect(user.email).to eq "temp_email_#{auth.uid}@#{auth.provider}.com"
+        end
+
+        it 'create oauth_provider for user' do
+          expect { User.find_for_oauth(auth) }.to change(OauthProvider, :count).by(1)
+        end
+
+        it 'creates oauth_provider with provider and uid' do
+          authorization = User.find_for_oauth(auth).oauth_providers.first
+
+          expect(authorization.provider).to eq auth.provider
+          expect(authorization.uid).to eq auth.uid
+        end
+      end
+    end
+  end
+
+  describe "#email_verified?" do
+    let(:user) { create(:user) }
+    let(:user_temp_email) { create(:user, email: 'temp_email_123456@twitter.com') }
+
+    it 'User with valid email' do
+      expect(user).to be_email_verified
+    end
+
+    it 'User with temporary email' do
+      expect(user_temp_email).to_not be_email_verified
     end
   end
 end
