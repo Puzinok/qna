@@ -17,6 +17,7 @@ feature 'Singin in', %q{
 
     scenario "sign in with temporary email" do
       expect(page).to have_content('temp_email_12345@twitter.com')
+      expect(page).to_not have_content 'Sign in'
     end
 
     scenario 'confirm account by email' do
@@ -28,8 +29,11 @@ feature 'Singin in', %q{
 
       open_email('test@example.com')
       current_email.click_link 'Confirm my account'
-
       expect(page).to have_content 'Your email address has been successfully confirmed.'
+
+      visit root_path
+      expect(page).to have_content("test@example.com")
+      expect(page).to_not have_content 'Sign in'
     end
   end
 

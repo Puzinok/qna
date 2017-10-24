@@ -12,6 +12,7 @@ feature 'Singin in', %q{
     mock_auth_hash
     click_on "Sign in with Facebook"
     expect(page).to have_content('mock@email.com')
+    expect(page).to have_content('Successfully authenticated from Facebook account.')
   end
 
   scenario "can handle authentication error" do
