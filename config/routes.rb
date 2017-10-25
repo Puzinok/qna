@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
   root to: 'questions#index'
 
   concern :votable do
@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   end
 
   resources :attachments, only: [:destroy]
+
+ match '/users/email_confirmation', to: 'users#email_confirmation', via: [:get, :patch], as: 'email_confirmation'
 
   mount ActionCable.server => '/cable'
 end

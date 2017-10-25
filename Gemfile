@@ -44,9 +44,14 @@ gem 'skim'
 gem 'gon'
 gem 'responders', '~> 2.0'
 
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-twitter'
+
 group :test do
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'
   gem 'launchy'
+  gem 'capybara-email'
 end
 
 group :development, :test do
@@ -60,6 +65,7 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'database_cleaner'
   gem 'capybara-webkit'
+  gem 'letter_opener'
 end
 
 group :development do
