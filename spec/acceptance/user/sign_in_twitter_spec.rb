@@ -1,4 +1,4 @@
-require_relative 'acceptance_helper'
+require_relative '../acceptance_helper'
 require 'capybara/email/rspec'
 
 feature 'Singin in', %q{

@@ -1,4 +1,4 @@
-require_relative 'acceptance_helper'
+require_relative '../acceptance_helper'
 
 feature 'Answers author can remove answer attachment', %q{
   In order to fix mistake
