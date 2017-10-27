@@ -23,7 +23,7 @@ Rails.application.routes.draw do
 
   resources :attachments, only: [:destroy]
 
- match '/users/email_confirmation', to: 'users#email_confirmation', via: [:get, :patch], as: 'email_confirmation'
+  match '/users/email_confirmation', to: 'users#email_confirmation', via: [:get, :patch], as: 'email_confirmation'
 
   mount ActionCable.server => '/cable'
 end

@@ -7,6 +7,8 @@ class QuestionsController < ApplicationController
 
   after_action :publish_question, only: [:create]
 
+  authorize_resource
+
   respond_to :html, :json
 
   def index
