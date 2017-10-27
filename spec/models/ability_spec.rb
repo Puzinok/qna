@@ -25,6 +25,8 @@ describe Ability do
     let(:another_user) { create :user }
     let(:question) { create :question, user: user }
     let(:another_question) { create :question, user: another_user }
+    let(:attachment) { create(:attachment, attachable: create(:question, user: user)) }
+    let(:another_attachment) { create(:attachment, attachable: create(:question, user: another_user)) }
 
     it { should_not be_able_to :manage, :all }
 
@@ -48,5 +50,8 @@ describe Ability do
 
     it { should be_able_to :choose_best, create(:answer, question: question) }
     it { should_not be_able_to :choose_best, create(:answer, question: another_question) }
+
+    it { should be_able_to :destroy, attachment }
+    it { should_not be_able_to :destroy, another_attachment }
   end
 end
