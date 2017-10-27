@@ -27,7 +27,15 @@ class Ability
     guest_abilities
     can :create, [Question, Answer, Comment]
     can :modify, [Question, Answer], user: user
-    can :voting, [Question, Answer] { |votable| votable.user != user }
+
+    can :voting, [Question, Answer] do |votable|
+      votable.user != user
+    end
+
     can :choose_best, Answer, question: { user_id: user.id }
+
+    can :destroy, Attachment do |attachment|
+      user.author_of?(attachment.attachable)
+    end
   end
 end

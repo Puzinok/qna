@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
   before_action :gon_user, unless: :devise_controller?
   before_action :redirect_to_confirm, unless: :devise_controller?
 
+  check_authorization unless: :devise_controller?
+
   private
 
   def redirect_to_confirm
@@ -22,6 +24,4 @@ class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to root_path, alert: exception.message
   end
-
-  #check_authorization
 end

@@ -2,6 +2,8 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
   before_action :redirect_if_confirmed
 
+  skip_authorization_check
+
   def email_confirmation
     if request.patch? && params[:user]
       if current_user.update(user_params)
