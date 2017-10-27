@@ -43,6 +43,7 @@ gem 'cocoon'
 gem 'skim'
 gem 'gon'
 gem 'responders', '~> 2.0'
+gem 'cancancan'
 
 gem 'omniauth'
 gem 'omniauth-facebook'
