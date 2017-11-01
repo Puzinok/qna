@@ -2,12 +2,11 @@ class QuestionsController < ApplicationController
   include Voted
 
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_question, except: [:index, :new, :create]
   before_action :build_answer, only: [:show]
 
   after_action :publish_question, only: [:create]
 
-  authorize_resource
+  load_and_authorize_resource
 
   respond_to :html, :json
 
@@ -29,11 +28,11 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    respond_with(@question.destroy) if current_user&.author_of?(@question)
+    respond_with(@question.destroy)
   end
 
   def update
-    @question.update(question_params) if current_user.author_of?(@question)
+    @question.update(question_params)
   end
 
   private
@@ -42,10 +41,6 @@ class QuestionsController < ApplicationController
     return if @question.errors.any?
     ActionCable.server.broadcast('questions',
                                  id: @question.id, title: @question.title)
-  end
-
-  def set_question
-    @question = Question.find(params[:id])
   end
 
   def build_answer
