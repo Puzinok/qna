@@ -17,13 +17,13 @@ Rails.application.routes.draw do
   resources :questions, concerns: [:votable, :commentable], shallow: true do
     resources :answers do
       concerns [:votable, :commentable]
-      patch :choose_best
+      patch :choose_best, on: :member
     end
   end
 
   resources :attachments, only: [:destroy]
 
- match '/users/email_confirmation', to: 'users#email_confirmation', via: [:get, :patch], as: 'email_confirmation'
+  match '/users/email_confirmation', to: 'users#email_confirmation', via: [:get, :patch], as: 'email_confirmation'
 
   mount ActionCable.server => '/cable'
 end

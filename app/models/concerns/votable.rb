@@ -14,10 +14,8 @@ module Votable
   end
 
   def vote(user, value)
-    return if user.author_of?(self)
     return if voted?(user)
-    vote = votes.build(user: user, value: value)
-    vote.save
+    votes.create(user: user, value: value)
   end
 
   def vote_destroy(user)

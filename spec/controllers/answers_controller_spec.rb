@@ -179,13 +179,13 @@ RSpec.describe AnswersController, type: :controller do
         let(:answer) { create(:answer, question: author_question) }
 
         it "try change 'best' attribute to true" do
-          patch :choose_best, params: { answer_id: answer.id }, format: :js
+          patch :choose_best, params: { id: answer.id }, format: :js
           answer.reload
           expect(answer.best).to eq true
         end
 
         it 'render update view' do
-          patch :choose_best, params: { answer_id: answer.id }, format: :js
+          patch :choose_best, params: { id: answer.id }, format: :js
           expect(response).to render_template :choose_best
         end
       end
@@ -197,7 +197,7 @@ RSpec.describe AnswersController, type: :controller do
         let(:answer) { create(:answer, question: author_question) }
 
         it "try change 'best' attribute to true" do
-          patch :choose_best, params: { answer_id: answer.id }, format: :js
+          patch :choose_best, params: { id: answer.id }, format: :js
           answer.reload
           expect(answer.best).to eq false
         end
@@ -209,13 +209,13 @@ RSpec.describe AnswersController, type: :controller do
         let(:answer) { create(:answer, question: author_question) }
 
         it "try change 'best' attribute to true" do
-          patch :choose_best, params: { answer_id: answer.id }, format: :js
+          patch :choose_best, params: { id: answer.id }, format: :js
           answer.reload
           expect(answer.best).to eq false
         end
 
         it "redirect to sign page" do
-          patch :choose_best, params: { answer_id: answer.id }
+          patch :choose_best, params: { id: answer.id }
           expect(response).to redirect_to new_user_session_path
         end
       end

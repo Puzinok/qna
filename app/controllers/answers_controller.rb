@@ -2,9 +2,10 @@ class AnswersController < ApplicationController
   include Voted
 
   before_action :authenticate_user!
-  before_action :set_answer, only: [:destroy, :update]
   before_action :set_question, only: [:create, :publish_answer]
   after_action :publish_answer, only: [:create]
+
+  load_and_authorize_resource
 
   respond_to :js
 
@@ -21,10 +22,7 @@ class AnswersController < ApplicationController
   end
 
   def choose_best
-    @answer = Answer.find(params[:answer_id])
-    @answers = @answer.question.answers
-
-    @answer.toggle_best! if current_user&.author_of?(@answer.question)
+    @answer.toggle_best!
   end
 
   private
@@ -34,10 +32,6 @@ class AnswersController < ApplicationController
       "answers_question_id_#{@question.id}",
       answer: @answer, attachments: @answer.get_attachments
     )
-  end
-
-  def set_answer
-    @answer = Answer.find(params[:id])
   end
 
   def set_question

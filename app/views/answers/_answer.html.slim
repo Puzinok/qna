@@ -8,7 +8,7 @@ div.well.well-sm id="answer_body_#{answer.id}"
 
       p
     - if current_user&.author_of?(answer.question) && !answer.best
-      = link_to 'Best', answer_choose_best_path(answer), method: :patch, remote: true
+      = link_to 'Best', choose_best_answer_path(answer), method: :patch, remote: true
 
     .answer_rating
       .rating_msg

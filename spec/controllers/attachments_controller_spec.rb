@@ -19,11 +19,6 @@ RSpec.describe AttachmentsController, type: :controller do
         expect { delete :destroy, params: { id: file.id }, format: :js }
           .to_not change(question.attachments, :count)
       end
-
-      it 'render forbidden' do
-        delete :destroy, params: { id: file.id }, format: :js
-        expect(response).to render_template :destroy
-      end
     end
 
     context 'Author of question' do

@@ -1,14 +1,13 @@
-require_relative 'acceptance_helper'
+require_relative '../acceptance_helper'
 
-feature 'Create comments for answer', %q{
-  In order to clarify about answer
+feature 'Create comments for question', %q{
+  In order to clarify about question
   As an authenticate user
   I want to be able to leave comments'
   } do
 
   given(:user) { create(:user) }
   given(:question) { create(:question) }
-  given(:answer) { create(:answer) }
   given(:comment) { create(:comment, commentable: question) }
 
   scenario 'Authenticate user can leave comment', js: true do

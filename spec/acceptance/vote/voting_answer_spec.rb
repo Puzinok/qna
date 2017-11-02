@@ -1,4 +1,4 @@
-require_relative 'acceptance_helper'
+require_relative '../acceptance_helper'
 
 feature 'User can voting for answer', %q{
   'In order to increase or decrease the answer rating'
