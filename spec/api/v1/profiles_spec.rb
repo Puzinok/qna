@@ -78,7 +78,7 @@ describe 'Profile API' do
 
       %w(password encrypted_password).each do |attr|
         it "does not contains #{attr}" do
-          users.each_with_index do |user, index|
+          users.each.with_index do |index|
             expect(response.body).to_not have_json_path("#{index}/#{attr}")
           end
         end

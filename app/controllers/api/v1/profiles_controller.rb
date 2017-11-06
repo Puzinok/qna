@@ -9,7 +9,7 @@ class Api::V1::ProfilesController < ApplicationController
   end
 
   def users
-    respond_with User.where.not(id: doorkeeper_token.resource_owner_id) if doorkeeper_token
+    respond_with User.where.not(id: current_resource_owner.id)
   end
 
   protected
