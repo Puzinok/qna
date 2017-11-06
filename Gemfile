@@ -44,6 +44,7 @@ gem 'skim'
 gem 'gon'
 gem 'responders', '~> 2.0'
 gem 'cancancan'
+gem 'doorkeeper'
 
 gem 'omniauth'
 gem 'omniauth-facebook'
@@ -53,6 +54,7 @@ group :test do
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'
   gem 'launchy'
   gem 'capybara-email'
+  gem 'json_spec'
 end
 
 group :development, :test do
