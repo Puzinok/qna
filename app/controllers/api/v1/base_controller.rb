@@ -1,7 +1,7 @@
 class Api::V1::BaseController < ApplicationController
   before_action :doorkeeper_authorize!
 
-  load_and_authorize_resource
+  #load_and_authorize_resource
 
   respond_to :json
 

@@ -7,6 +7,7 @@ describe 'Questions API' do
   let!(:answer) { create(:answer, question: question) }
   let!(:question_comments) { create_list(:comment, 2, commentable: question) }
   let(:question_comment) { question_comments.first }
+  let!(:attach) { create(:attachment, attachable: question) }
 
   describe 'GET /index' do
     context 'unauthorized' do
@@ -74,6 +75,18 @@ describe 'Questions API' do
         %w(id body created_at updated_at).each do |attr|
           it "object contains #{attr}" do
             expect(response.body).to be_json_eql(question_comment.send(attr.to_sym).to_json).at_path("comments/0/#{attr}")
+          end
+        end
+      end
+
+      context 'attachments' do
+        it 'included in question object' do
+          expect(response.body).to have_json_size(1).at_path("attachments")
+        end
+
+        %w(attachments created_at updated_at).each do |attr|
+          it "object contains #{attr}" do
+            expect(response.body).to be_json_eql(question.send(attr.to_sym).to_json).at_path("#{attr}")
           end
         end
       end
