@@ -45,6 +45,7 @@ gem 'gon'
 gem 'responders', '~> 2.0'
 gem 'cancancan'
 gem 'doorkeeper'
+gem 'active_model_serializers'
 
 gem 'omniauth'
 gem 'omniauth-facebook'
