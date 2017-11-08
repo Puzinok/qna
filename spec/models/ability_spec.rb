@@ -53,5 +53,8 @@ describe Ability do
 
     it { should be_able_to :destroy, attachment }
     it { should_not be_able_to :destroy, another_attachment }
+
+    it { should be_able_to :me, User }
+    it { should be_able_to :users, User }
   end
 end
