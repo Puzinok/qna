@@ -11,7 +11,13 @@ describe 'Questions API' do
 
   describe 'GET /index' do
     it_behaves_like "API Authenticable"
-    it_behaves_like "API Indexable"
+
+    context "get question list" do
+      it 'contains questions list' do
+        do_authorize(access_token: access_token.token)
+        expect(response.body).to have_json_size(2)
+      end
+    end
 
     %w(id title body created_at updated_at).each do |attr|
       it "question object contains #{attr}" do
@@ -29,34 +35,13 @@ describe 'Questions API' do
     it_behaves_like "API Authenticable"
 
     context 'authorized' do
-      before { do_authorize(access_token: access_token.token)}
+      before { do_authorize(access_token: access_token.token) }
+
+      it_behaves_like "API Commentable"
+      it_behaves_like "API Attachable"
 
       context 'question' do
         %w(id title body created_at updated_at).each do |attr|
-          it "contains #{attr}" do
-            expect(response.body).to be_json_eql(question.send(attr.to_sym).to_json).at_path(attr.to_s)
-          end
-        end
-      end
-
-      context 'comments' do
-        it 'included in questions object' do
-          expect(response.body).to have_json_size(2).at_path("comments")
-        end
-
-        %w(id body created_at updated_at).each do |attr|
-          it "contains #{attr}" do
-            expect(response.body).to be_json_eql(comment.send(attr.to_sym).to_json).at_path("comments/0/#{attr}")
-          end
-        end
-      end
-
-      context 'attachments' do
-        it 'included in question object' do
-          expect(response.body).to have_json_size(1).at_path("attachments")
-        end
-
-        %w(attachments created_at updated_at).each do |attr|
           it "contains #{attr}" do
             expect(response.body).to be_json_eql(question.send(attr.to_sym).to_json).at_path(attr.to_s)
           end
@@ -66,6 +51,10 @@ describe 'Questions API' do
 
     def do_authorize(options = {})
       get "/api/v1/questions/#{question.id}", params: { format: :json }.merge(options)
+    end
+
+    def attachable
+      question
     end
   end
 
@@ -87,15 +76,15 @@ describe 'Questions API' do
                                               question: attributes_for(:question),
                                               access_token: access_token.token }
 
-          expect(response.body).to be_json_eql(Question.last.send(attr.to_sym).to_json).at_path("#{attr}")
+          expect(response.body).to be_json_eql(Question.last.send(attr.to_sym).to_json).at_path(attr.to_s)
         end
       end
 
       %w(title body).each do |attr|
         it "return error if #{attr} blank " do
           post '/api/v1/questions', params: { format: :json,
-                                            question: attributes_for(:invalid_question),
-                                            access_token: access_token.token }
+                                              question: attributes_for(:invalid_question),
+                                              access_token: access_token.token }
 
           expect(response.body).to be_json_eql("can't be blank".to_json).at_path("errors/#{attr}/0")
         end
@@ -104,7 +93,7 @@ describe 'Questions API' do
 
     def do_authorize(options = {})
       post '/api/v1/questions', params: { format: :json,
-                                          question: attributes_for(:question)}.merge(options)
+                                          question: attributes_for(:question) }.merge(options)
     end
   end
 end
