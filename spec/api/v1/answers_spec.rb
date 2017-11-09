@@ -10,56 +10,26 @@ describe 'Answer API' do
   let(:comment) { comments.first }
 
   describe 'GET /index' do
-    context 'unauthorized' do
-      it 'returns 401 status if no access_token' do
-        get "/api/v1/questions/#{question.id}/answers", params: { format: :json }
-        expect(response.status).to eq 401
-      end
+    it_behaves_like "API Authenticable"
+    it_behaves_like "API Indexable"
 
-      it 'returns 401 status if no access_token is invalid' do
-        get "/api/v1/questions/#{question.id}/answers", params: { access_token: '112233', format: :json }
-        expect(response.status).to eq 401
+    %w(id body created_at updated_at).each do |attr|
+      it "answer object contains #{attr}" do
+        do_authorize(access_token: access_token.token)
+        expect(response.body).to be_json_eql(answer.send(attr.to_sym).to_json).at_path("0/#{attr}")
       end
     end
 
-    context 'authorized' do
-      before { get "/api/v1/questions/#{question.id}/answers", params: { format: :json, access_token: access_token.token } }
-
-      it 'returns 200 status code' do
-        expect(response).to be_success
-      end
-
-      it 'contains answers list' do
-        expect(response.body).to have_json_size(2)
-      end
-
-      %w(id body created_at updated_at).each do |attr|
-        it "answer object contains #{attr}" do
-          expect(response.body).to be_json_eql(answer.send(attr.to_sym).to_json).at_path("0/#{attr}")
-        end
-      end
+    def do_authorize(options = {})
+      get "/api/v1/questions/#{question.id}/answers", params: { format: :json }.merge(options)
     end
   end
 
   describe 'GET /show' do
-    context 'unauthorized' do
-      it 'returns 401 status if no access_token' do
-        get "/api/v1/questions/#{question.id}/answers/#{answer.id}", params: { format: :json }
-        expect(response.status).to eq 401
-      end
-
-      it 'returns 401 status if no access_token is invalid' do
-        get "/api/v1/questions/#{question.id}/answers/#{answer.id}", params: { access_token: '112233', format: :json }
-        expect(response.status).to eq 401
-      end
-    end
+    it_behaves_like "API Authenticable"
 
     context 'authorized' do
-      before { get "/api/v1/questions/#{question.id}/answers/#{answer.id}", params: { format: :json, access_token: access_token.token } }
-
-      it 'returns status 200' do
-        expect(response).to be_success
-      end
+      before { do_authorize(access_token: access_token.token) }
 
       %w(id body created_at updated_at).each do |attr|
         it "answer object contains #{attr}" do
@@ -91,29 +61,16 @@ describe 'Answer API' do
         end
       end
     end
+
+    def do_authorize(options = {})
+      get "/api/v1/questions/#{question.id}/answers/#{answer.id}",
+          params: { format: :json }.merge(options)
+    end
   end
 
   describe 'POST /create' do
-    context 'unauthorized' do
-      it 'returns 401 status if no access_token' do
-        post "/api/v1/questions/#{question.id}/answers", params: { format: :json }
-        expect(response.status).to eq 401
-      end
-
-      it 'returns 401 status if no access_token is invalid' do
-        post "/api/v1/questions/#{question.id}/answers", params: { access_token: '112233', format: :json }
-        expect(response.status).to eq 401
-      end
-    end
 
     context 'authorized' do
-      it 'returns status 201' do
-        post "/api/v1/questions/#{question.id}/answers", params: { format: :json,
-                                                                   answer: attributes_for(:answer),
-                                                                   access_token: access_token.token }
-        expect(response.status).to eq 201
-      end
-
       it 'create answer' do
         expect {
           post "/api/v1/questions/#{question.id}/answers", params: { format: :json,
@@ -139,6 +96,12 @@ describe 'Answer API' do
 
         expect(response.body).to be_json_eql("can't be blank".to_json).at_path("errors/body/0")
       end
+    end
+
+    def do_authorize(options = {})
+      post "/api/v1/questions/#{question.id}/answers", params: {  format: :json,
+                                                                  answer: attributes_for(:answer) }.merge(options)
+
     end
   end
 end

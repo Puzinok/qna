@@ -2,27 +2,13 @@ require 'rails_helper'
 
 describe 'Profile API' do
   describe 'GET /me' do
-    context 'unauthorized' do
-      it 'returns 401 status if no access_token' do
-        get '/api/v1/profiles/me', params: { format: :json }
-        expect(response.status).to eq 401
-      end
+    let(:me) { create(:user) }
+    let(:access_token) { create(:access_token, resource_owner_id: me.id) }
 
-      it 'returns 401 status if no access_token is invalid' do
-        get '/api/v1/profiles/me', params: { access_token: '112233', format: :json }
-        expect(response.status).to eq 401
-      end
-    end
+    it_behaves_like "API Authenticable"
 
     context 'authorized' do
-      let(:me) { create(:user) }
-      let(:access_token) { create(:access_token, resource_owner_id: me.id) }
-
-      before { get '/api/v1/profiles/me', params: { format: :json, access_token: access_token.token } }
-
-      it 'return status 200' do
-        expect(response).to be_success
-      end
+      before { do_authorize(access_token: access_token.token) }
 
       %w(id email updated_at created_at).each do |attr|
         it "contains #{attr}" do
@@ -36,27 +22,21 @@ describe 'Profile API' do
         end
       end
     end
+
+    def do_authorize(options = {})
+      get '/api/v1/profiles/me', params: { format: :json }.merge(options)
+    end
   end
 
   describe 'GET /users' do
-    context 'unauthorized' do
-      it 'returns 401 status if no access_token' do
-        get '/api/v1/profiles/users', params: { format: :json }
-        expect(response.status).to eq 401
-      end
+    let(:me) { create(:user) }
+    let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+    let!(:users) { create_list(:user, 2) }
 
-      it 'returns 401 status if no access_token is invalid' do
-        get '/api/v1/profiles/users', params: { access_token: '112233', format: :json }
-        expect(response.status).to eq 401
-      end
-    end
+    it_behaves_like "API Authenticable"
 
     context 'authorized' do
-      let(:me) { create(:user) }
-      let(:access_token) { create(:access_token, resource_owner_id: me.id) }
-      let!(:users) { create_list(:user, 2) }
-
-      before { get '/api/v1/profiles/users', params: { format: :json, access_token: access_token.token } }
+      before { do_authorize(access_token: access_token.token) }
 
       it 'respons status 200' do
         expect(response).to be_success
@@ -87,6 +67,10 @@ describe 'Profile API' do
       it 'does not contains resource owner' do
         expect(response.body).to_not include_json(me.to_json)
       end
+    end
+
+    def do_authorize(options = {})
+      get '/api/v1/profiles/users', params: { format: :json }.merge(options)
     end
   end
 end
