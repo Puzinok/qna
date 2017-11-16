@@ -8,8 +8,8 @@ RSpec.describe SendNoticeJob, type: :job do
   it 'calls AnswerMailer for send notification' do
     subscriptions.each do |subscription|
       expect(AnswerMailer)
-      .to receive(:send_to)
-      .with(subscription.user, question).and_call_original
+        .to receive(:send_to)
+        .with(subscription.user, question).and_call_original
     end
 
     expect(AnswerMailer).to receive(:send_to).with(question.user, question).and_call_original

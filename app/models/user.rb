@@ -3,7 +3,7 @@ class User < ApplicationRecord
   has_many :answers
   has_many :votes
   has_many :oauth_providers, dependent: :destroy
-  has_many :subscriptions, dependent: :destroy 
+  has_many :subscriptions, dependent: :destroy
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :confirmable,
@@ -37,6 +37,10 @@ class User < ApplicationRecord
 
   def email_verified?
     email && email !~ /\Atemp_email/
+  end
+
+  def find_subscribe(question)
+    subscriptions.find_by(question: question)
   end
 
   protected

@@ -2,6 +2,9 @@
   .panel-heading
     h3.panel-title = question.title
     i author: #{question.user.email}
+ 
+    = render partial: 'subscription', locals: { question: question }
+
   .panel-body
     = question.body
     #attachments

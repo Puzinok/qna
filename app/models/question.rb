@@ -9,15 +9,13 @@ class Question < ApplicationRecord
 
   validates :title, :body, presence: true
 
+  scope :of_past_day, -> { where(created_at: Date.yesterday.beginning_of_day..Time.now) }
+
   after_create :subscribe_author
-  
+
   private
 
   def subscribe_author
     subscriptions.create!(user: user)
-  end
-
-  def self.of_past_day
-    where(created_at: Date.yesterday.beginning_of_day..Time.now)
   end
 end
