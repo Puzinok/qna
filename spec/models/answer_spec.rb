@@ -36,4 +36,14 @@ RSpec.describe Answer, type: :model do
       expect(answer.get_attachments[0]).to include(filename: attachment.file.identifier, url: attachment.file.url)
     end
   end
+
+  describe '#send_notice_author' do
+    let!(:question) { create(:question) }
+    let(:answer) { build(:answer, question: question) }
+
+    it 'should send notice to questions author after create' do
+      expect(answer).to receive(:send_notice)
+      answer.save!
+    end
+  end
 end
