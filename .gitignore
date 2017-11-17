@@ -58,3 +58,7 @@ bower.json
 
 #rubymine idea
 /.idea/*
+
+#sphinx db
+config/*.sphinx.conf
+db/sphinx/*
