@@ -14,10 +14,10 @@ RSpec.describe Question, type: :model do
   it_behaves_like "votable"
 
   describe ".of_past_day" do
-    let!(:questions) { create_list(:question, 2) }
+    let!(:questions) { create_list(:question, 2, created_at: 1.day.ago) }
     let!(:question) { create(:question, created_at: 2.days.ago) }
 
-    it 'questions in the last 24 hours' do
+    it "yesterday's questions" do
       expect(Question.of_past_day.count).to eq 2
     end
 

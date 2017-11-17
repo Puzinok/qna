@@ -29,6 +29,6 @@ class Answer < ApplicationRecord
   private
 
   def send_notice
-    SendNoticeJob.perform_now question
+    SendNoticeJob.perform_later question
   end
 end

@@ -4,7 +4,7 @@ RSpec.describe DailyMailer, type: :mailer do
   describe "digest" do
     let!(:user) { create(:user) }
     let(:mail) { DailyMailer.digest(user) }
-    let!(:question) { create(:question) }
+    let!(:question) { create(:question, created_at: 1.day.ago) }
 
     it "renders the headers" do
       expect(mail.subject).to eq("Digest [#{Date.yesterday}]")

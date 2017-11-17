@@ -9,7 +9,7 @@ class Question < ApplicationRecord
 
   validates :title, :body, presence: true
 
-  scope :of_past_day, -> { where(created_at: Date.yesterday.beginning_of_day..Time.now) }
+  scope :of_past_day, -> { where(created_at: Date.yesterday..Date.current) }
 
   after_create :subscribe_author
 
