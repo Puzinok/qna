@@ -10,6 +10,8 @@ class Answer < ApplicationRecord
 
   default_scope { order(best: :desc, created_at: :asc) }
 
+  after_create :send_notice
+
   def toggle_best!
     transaction do
       previous_best_answer = question.answers.find_by(best: true)
@@ -22,5 +24,11 @@ class Answer < ApplicationRecord
     attachments.map do |a|
       { filename: a.file.identifier, url: a.file.url }
     end
+  end
+
+  private
+
+  def send_notice
+    SendNoticeJob.perform_later question
   end
 end

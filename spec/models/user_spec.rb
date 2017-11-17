@@ -7,6 +7,7 @@ RSpec.describe User, type: :model do
   it { should have_many(:answers) }
   it { should have_many(:votes) }
   it { should have_many(:oauth_providers) }
+  it { should have_many(:subscriptions).dependent(:destroy) }
 
   describe '#author_of?' do
     let(:user) { create(:user) }
@@ -128,6 +129,16 @@ RSpec.describe User, type: :model do
 
     it 'User with temporary email' do
       expect(user_temp_email).to_not be_email_verified
+    end
+  end
+
+  describe "#find_subscribe" do
+    let(:user) { create :user }
+    let(:question) { create(:question) }
+    let!(:subscriptions) { create(:subscription, question: question, user: user) }
+
+    it 'find users subscription for question' do
+      expect(user.find_subscribe(question)).to be_a(Subscription)
     end
   end
 end

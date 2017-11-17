@@ -1,0 +1,5 @@
+p Hello!
+p This is digest of questions in the last day.
+ul
+  - @questions.each do |question|
+    li = link_to "#{question.title}", url_for(question)

@@ -27,8 +27,10 @@ class Ability
     guest_abilities
     can :me, User, user: user
     can :users, User
-    can :create, [Question, Answer, Comment]
+    can :create, [Question, Answer, Comment, Subscription]
     can :modify, [Question, Answer], user: user
+
+    can :destroy, Subscription, user_id: user.id
 
     can :voting, [Question, Answer] do |votable|
       votable.user != user
