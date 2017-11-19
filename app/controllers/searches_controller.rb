@@ -5,6 +5,8 @@ class SearchesController < ApplicationController
   end
 
   def create
-    @search_results = ThinkingSphinx.search(params[:search])
+    @resource = params[:resource]
+    @query = params[:search]
+    @search_results = Search.execute(@query, @resource)
   end
 end

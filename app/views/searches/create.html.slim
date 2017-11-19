@@ -1,8 +1,3 @@
-- @search_results.each do |result|
-  
-  -if result.try(:title)
-    h3 = result.title
-  
-  p
-    =result.body
-
+p
+  - @search_results.each do |object|
+    = render "#{object.class.name.downcase}", object: object
