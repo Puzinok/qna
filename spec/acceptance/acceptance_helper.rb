@@ -6,10 +6,13 @@ RSpec.configure do |config|
 
   config.include AcceptanceMacros, type: :feature
   config.include WaitForAjax, type: :feature
+  config.include SphinxHelpers, type: :feature
   config.use_transactional_fixtures = false
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
+    ThinkingSphinx::Test.init
+    ThinkingSphinx::Test.start_with_autostop
   end
 
   config.before(:each) do

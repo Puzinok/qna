@@ -1,0 +1,8 @@
+- @search_results.each do |result|
+  
+  -if result.try(:title)
+    h3 = result.title
+  
+  p
+    =result.body
+
