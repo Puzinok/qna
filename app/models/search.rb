@@ -1,23 +1,26 @@
 class Search
-  TYPES = %w(all questions answers comments users).freeze
+  RESOURCES = %w(all questions answers comments users).freeze
 
-  class << self
-    def execute(query, type)
-      if type == 'all'
-        ThinkingSphinx.search(escape(query))
-      else
-        klass(type).search(escape(query)) if TYPES.include?(type)
-      end
-    end
-    
-    private 
-    
-    def klass(string)
-      string.classify.constantize
-    end
+  def initialize(query, resource = 'all')
+    @query = query
+    @resource = if RESOURCES.include?(resource)
+                  resource
+                else
+                  'all'
+                end
+  end
 
-    def escape(query)
-      ThinkingSphinx::Query.escape(query)
+  def execute
+    if @resource == 'all'
+      ThinkingSphinx.search(escape(@query))
+    else
+      @resource.classify.constantize.search(escape(@query))
     end
+  end
+
+  private
+
+  def escape(query)
+    ThinkingSphinx::Query.escape(query)
   end
 end

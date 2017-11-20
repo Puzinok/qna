@@ -7,6 +7,6 @@ class SearchesController < ApplicationController
   def create
     @resource = params[:resource]
     @query = params[:search]
-    @search_results = Search.execute(@query, @resource)
+    @search_results = Search.new(@query, @resource).execute
   end
 end
