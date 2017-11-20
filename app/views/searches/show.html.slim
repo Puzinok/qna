@@ -1,0 +1,5 @@
+= form_tag search_path, method: :post do 
+  = text_field_tag :search, params[:search]
+  = select_tag :resource, options_for_select(%w(all questions answers comments users))
+  = submit_tag 'Search'
+  
