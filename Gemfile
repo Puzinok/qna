@@ -57,7 +57,7 @@ gem 'sidekiq'
 gem 'whenever'
 
 gem 'mysql2'
-gem 'thinking-sphinx'
+gem 'thinking-sphinx', '3.3.0'
 
 gem 'dotenv-rails'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
