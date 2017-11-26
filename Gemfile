@@ -59,6 +59,9 @@ gem 'whenever'
 gem 'mysql2'
 gem 'thinking-sphinx'
 
+gem 'dotenv-rails'
+gem 'dotenv-deployment', require: 'dotenv/deployment'
+
 group :test do
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'
   gem 'launchy'
@@ -78,7 +81,6 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'capybara-webkit'
   gem 'letter_opener'
-  gem 'dotenv-rails'
 end
 
 group :development do
