@@ -61,6 +61,7 @@ gem 'thinking-sphinx', '3.3.0'
 
 gem 'dotenv-rails'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
+gem 'unicorn'
 
 group :test do
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'
@@ -95,6 +96,7 @@ group :development do
   gem 'capistrano-rails', require: false
   gem 'capistrano-rvm', require: false
   gem 'capistrano-sidekiq', require: false
+  gem 'capistrano3-unicorn', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
