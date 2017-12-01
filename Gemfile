@@ -62,6 +62,7 @@ gem 'thinking-sphinx', '3.3.0'
 gem 'dotenv-rails'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
 gem 'unicorn'
+gem 'redis-rails'
 
 group :test do
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'

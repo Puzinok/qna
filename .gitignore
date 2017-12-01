@@ -64,3 +64,8 @@ bower.json
 #sphinx db
 config/*.sphinx.conf
 db/sphinx/*
+
+#capistrano
+Capfile
+/config/deploy/*
+

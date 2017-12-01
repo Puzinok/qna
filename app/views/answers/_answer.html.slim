@@ -37,8 +37,7 @@ div.well.well-sm id="answer_body_#{answer.id}"
       br
       = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
 
-    #answer_comments
-      - answer.comments.each do |comment|
-        p.bg-info = comment.body
-
-    = render partial: "comments/form", locals: {commentable: answer}
+    - cache answer.comments
+      #answer_comments
+        = render answer.comments
+      = render partial: "comments/form", locals: {commentable: answer}
