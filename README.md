@@ -1,24 +1,17 @@
-# README
+# QnA (Stack Overflow clone)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is training project for "Thinknetica" online school.
 
-Things you may want to cover:
+This project is clone of Stack Overflow website. The project uses:
+* Ruby 2.4
+* Rails 5.1
+* Websockets
+* OAuth
+* SphinxSearch
+* Devise
+* Sidekiq
+* RSpec, Capybara
 
-* Ruby version
+Most of code is covered by acceptance and unit tests.
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Demo: [qna.puzin.me](http://qna.puzin.me)
